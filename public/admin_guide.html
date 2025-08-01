@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Panduan Penggunaan Admin BlogZekkTech</title>
+        <style>
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            h1 {
+                color: #2563eb;
+                border-bottom: 2px solid #e5e7eb;
+                padding-bottom: 10px;
+            }
+            h2 {
+                color: #1f2937;
+                margin-top: 30px;
+            }
+            h3 {
+                color: #374151;
+            }
+            code {
+                background-color: #f3f4f6;
+                padding: 2px 4px;
+                border-radius: 4px;
+                font-family: "Courier New", Courier, monospace;
+            }
+            pre {
+                background-color: #f3f4f6;
+                padding: 15px;
+                border-radius: 8px;
+                overflow-x: auto;
+                font-family: "Courier New", Courier, monospace;
+            }
+            .step {
+                background-color: #f9fafb;
+                border-left: 4px solid #2563eb;
+                padding: 15px;
+                margin: 20px 0;
+                border-radius: 0 8px 8px 0;
+            }
+            img {
+                max-width: 100%;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+            .tip {
+                background-color: #dbeafe;
+                border-left: 4px solid #3b82f6;
+                padding: 15px;
+                margin: 20px 0;
+                border-radius: 0 8px 8px 0;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }
+            table th,
+            table td {
+                padding: 12px 15px;
+                text-align: left;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            table th {
+                background-color: #f3f4f6;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Panduan Penggunaan Admin Panel BlogZekkTech</h1>
+
+        <p>
+            Dokumen ini akan membantu Anda mengelola konten blog melalui panel
+            admin yang telah kami buat. Panel ini dirancang untuk memudahkan
+            pengelolaan artikel tanpa perlu memahami kode PHP.
+        </p>
+
+        <h2>Mengakses Panel Admin</h2>
+
+        <div class="step">
+            <ol>
+                <li>
+                    Buka website blog Anda di
+                    <code>http://localhost:8000</code> atau domain yang telah
+                    dikonfigurasi
+                </li>
+                <li>Klik link "Admin" yang ada di menu navigasi atas</li>
+                <li>
+                    Panel admin akan terbuka dengan daftar semua postingan yang
+                    ada
+                </li>
+            </ol>
+        </div>
+
+        <h2>Mengelola Postingan Blog</h2>
+
+        <h3>Melihat Semua Postingan</h3>
+
+        <p>
+            Halaman utama admin menampilkan semua postingan blog dengan
+            informasi:
+        </p>
+        <ul>
+            <li>Judul dan ringkasan</li>
+            <li>Kategori</li>
+            <li>Status publikasi (dipublikasikan atau draft)</li>
+            <li>Tombol aksi (lihat, edit, hapus)</li>
+        </ul>
+
+        <h3>Membuat Postingan Baru</h3>
+
+        <div class="step">
+            <ol>
+                <li>Klik tombol "Create New Post" di halaman admin</li>
+                <li>
+                    Isi formulir dengan informasi berikut:
+                    <ul>
+                        <li><strong>Title</strong>: Judul postingan Anda</li>
+                        <li>
+                            <strong>Category</strong>: Pilih kategori dari
+                            dropdown
+                        </li>
+                        <li>
+                            <strong>Excerpt</strong>: Ringkasan singkat yang
+                            akan muncul di halaman utama
+                        </li>
+                        <li>
+                            <strong>Body</strong>: Konten utama postingan
+                            (mendukung format Markdown)
+                        </li>
+                        <li>
+                            <strong>Featured Image</strong>: Unggah gambar utama
+                            (opsional)
+                        </li>
+                        <li>
+                            <strong>Publication Status</strong>: Centang
+                            "Publish immediately" untuk langsung mempublikasikan
+                        </li>
+                    </ul>
+                </li>
+                <li>Klik tombol "Create Post" untuk menyimpan postingan</li>
+            </ol>
+        </div>
+
+        <div class="tip">
+            <p>
+                <strong>Tip:</strong> Ringkasan (excerpt) sebaiknya tidak lebih
+                dari 150-200 karakter untuk tampilan yang optimal di halaman
+                utama.
+            </p>
+        </div>
+
+        <h3>Mengedit Postingan</h3>
+
+        <div class="step">
+            <ol>
+                <li>
+                    Di halaman daftar postingan, klik ikon pensil (edit) pada
+                    postingan yang ingin diubah
+                </li>
+                <li>
+                    Form edit akan muncul dengan data postingan yang sudah ada
+                </li>
+                <li>Ubah informasi yang diperlukan</li>
+                <li>Klik "Update Post" untuk menyimpan perubahan</li>
+            </ol>
+        </div>
+
+        <h3>Menghapus Postingan</h3>
+
+        <div class="step">
+            <ol>
+                <li>
+                    Di halaman daftar postingan, klik ikon tempat sampah
+                    (delete)
+                </li>
+                <li>Konfirmasi penghapusan saat dialog muncul</li>
+            </ol>
+        </div>
+
+        <div class="tip">
+            <p>
+                <strong>Perhatian:</strong> Penghapusan postingan bersifat
+                permanen dan tidak dapat dikembalikan.
+            </p>
+        </div>
+
+        <h2>Menggunakan Markdown</h2>
+
+        <p>
+            Blog ini mendukung format Markdown untuk memudahkan penulisan konten
+            terstruktur. Panduan singkat:
+        </p>
+
+        <h3>Format Dasar</h3>
+
+        <table>
+            <tr>
+                <th>Markdown</th>
+                <th>Hasil</th>
+            </tr>
+            <tr>
+                <td><code># Heading 1</code></td>
+                <td><h1 style="margin: 0; font-size: 24px">Heading 1</h1></td>
+            </tr>
+            <tr>
+                <td><code>## Heading 2</code></td>
+                <td><h2 style="margin: 0; font-size: 20px">Heading 2</h2></td>
+            </tr>
+            <tr>
+                <td><code>**Bold text**</code></td>
+                <td><strong>Bold text</strong></td>
+            </tr>
+            <tr>
+                <td><code>*Italic text*</code></td>
+                <td><em>Italic text</em></td>
+            </tr>
+        </table>
+
+        <h3>List</h3>
+
+        <pre>
+- Item 1
+- Item 2
+  - Sub-item
+
+1. Numbered item 1
+2. Numbered item 2
+</pre
+        >
+
+        <h3>Link dan Gambar</h3>
+
+        <pre>
+[Link text](https://example.com)
+
+![Alt text for image](path/to/image.jpg)
+</pre
+        >
+
+        <h3>Kode dan Sintaks</h3>
+
+        <pre>
+`inline code`
+
+```javascript
+// Code block
+function hello() {
+  console.log('Hello');
+}
+```
+</pre
+        >
+
+        <h3>Kutipan</h3>
+
+        <pre>
+> This is a blockquote
+> It can span multiple lines
+</pre
+        >
+
+        <h2>Struktur File Website</h2>
+
+        <p>Jika Anda tertarik untuk memahami struktur file website:</p>
+
+        <ul>
+            <li>
+                <code>app/Http/Controllers/Admin/PostController.php</code>: Kode
+                untuk mengelola postingan admin
+            </li>
+            <li>
+                <code>resources/views/admin/posts/</code>: Template untuk
+                halaman admin
+            </li>
+            <li>
+                <code>resources/views/blog/</code>: Template untuk halaman
+                publik blog
+            </li>
+            <li><code>routes/web.php</code>: Pengaturan URL website</li>
+        </ul>
+
+        <h2>Bantuan</h2>
+
+        <p>
+            Jika Anda memiliki pertanyaan atau masalah dalam menggunakan admin
+            panel ini, silakan hubungi pengembang. 
+        </p>
+    </body>
+</html>
