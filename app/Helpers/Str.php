@@ -22,27 +22,46 @@ class Str extends LaravelStr
     }
 
     /**
-     * Parse markdown text to HTML.
+     * Parse markdown text to HTML with natural spacing.
      *
      * @param  string  $text
      * @return string
      */
     public static function markdownToHtml(string $text): string
     {
-        // Menggunakan League CommonMark langsung untuk parse markdown
+        // Normalize line endings
+        $text = str_replace("\r\n", "\n", $text);
+        $text = str_replace("\r", "\n", $text);
+
+        // Preserve all line breaks - jangan ubah apa-apa
+        // Hanya bersihkan excessive line breaks (lebih dari 4)
+        $text = preg_replace('/\n{5,}/', "\n\n\n\n", $text);
+
+        // Menggunakan parser markdown yang lebih simple
+        if (class_exists('\Parsedown')) {
+            $parser = new \Parsedown();
+            $parser->setBreaksEnabled(true); // Enable line breaks
+            $parser->setMarkupEscaped(false); // Allow HTML
+            $parser->setUrlsLinked(true); // Auto-link URLs
+
+            $html = $parser->text($text);
+
+            // Post-process untuk spacing yang lebih natural
+            // Convert double line breaks ke proper paragraph spacing
+            $html = str_replace("\n\n", "</p>\n<p>", $html);
+
+            return $html;
+        }
+
+        // Fallback ke League CommonMark
         $environment = new \League\CommonMark\Environment\Environment([
             'html_input' => 'allow',
             'allow_unsafe_links' => false,
         ]);
 
-        // Menambahkan ekstensi-ekstensi umum
         $environment->addExtension(new \League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension());
-        $environment->addExtension(new \League\CommonMark\Extension\Table\TableExtension());
-        $environment->addExtension(new \League\CommonMark\Extension\Autolink\AutolinkExtension());
 
-        // Membuat parser dan merender HTML
         $converter = new \League\CommonMark\MarkdownConverter($environment);
-
         return $converter->convert($text)->getContent();
     }
 }

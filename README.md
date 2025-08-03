@@ -10,31 +10,33 @@ BlogZekkTech adalah platform blog yang dibuat untuk berbagi pengetahuan teknolog
 
 ## � Topik Artikel
 
-- 💻 **Teknologi Terkini**: Update dan review teknologi terbaru
-- 🛠️ **Tips & Trik**: Panduan praktis untuk developer dan tech enthusiast  
-- 📱 **Mobile Development**: Tutorial dan best practices
-- 🌐 **Web Development**: Frontend, backend, dan full-stack development
-- 🔒 **Cybersecurity**: Keamanan digital dan privacy
-- 🤖 **AI & Machine Learning**: Perkembangan dan implementasi AI
-- ☁️ **Cloud Computing**: Layanan cloud dan deployment
+-   💻 **Teknologi Terkini**: Update dan review teknologi terbaru
+-   🛠️ **Tips & Trik**: Panduan praktis untuk developer dan tech enthusiast
+-   📱 **Mobile Development**: Tutorial dan best practices
+-   🌐 **Web Development**: Frontend, backend, dan full-stack development
+-   🔒 **Cybersecurity**: Keamanan digital dan privacy
+-   🤖 **AI & Machine Learning**: Perkembangan dan implementasi AI
+-   ☁️ **Cloud Computing**: Layanan cloud dan deployment
 
 ## ✨ Fitur
 
 ### Frontend
-- 🎨 **Multi-Theme Support**: Light, Dark, dan Warm theme untuk kenyamanan membaca
-- 📱 **Responsive Design**: Optimized untuk desktop dan mobile
-- 🔍 **Real-time Search**: Pencarian artikel dengan AJAX
-- 🎯 **Clean UI**: Desain minimalist untuk fokus pada konten
-- 📖 **Markdown Support**: Dukungan penuh untuk format Markdown
-- 🏷️ **Category System**: Sistem kategorisasi artikel berdasarkan topik
-- 📊 **SEO Friendly**: Optimized untuk search engine
+
+-   🎨 **Multi-Theme Support**: Light, Dark, dan Warm theme untuk kenyamanan membaca
+-   📱 **Responsive Design**: Optimized untuk desktop dan mobile
+-   🔍 **Real-time Search**: Pencarian artikel dengan AJAX
+-   🎯 **Clean UI**: Desain minimalist untuk fokus pada konten
+-   📖 **Markdown Support**: Dukungan penuh untuk format Markdown
+-   🏷️ **Category System**: Sistem kategorisasi artikel berdasarkan topik
+-   📊 **SEO Friendly**: Optimized untuk search engine
 
 ### Admin Panel
-- 👨‍💼 **User Management**: Sistem admin dan user management
-- ✍️ **Content Management**: CRUD lengkap untuk artikel dan kategori
-- 🖼️ **Image Upload**: Upload dan manajemen gambar
-- 📋 **Dashboard Analytics**: Overview konten dan statistik
-- 🔐 **Secure Authentication**: Sistem login yang aman
+
+-   👨‍💼 **User Management**: Sistem admin dan user management
+-   ✍️ **Content Management**: CRUD lengkap untuk artikel dan kategori
+-   🖼️ **Image Upload**: Upload dan manajemen gambar
+-   📋 **Dashboard Analytics**: Overview konten dan statistik
+-   🔐 **Secure Authentication**: Sistem login yang aman
 
 ## 🛠️ Tech Stack
 
@@ -211,13 +213,14 @@ Project ini menggunakan [MIT License](LICENSE).
 
 ## 🙏 Acknowledgments
 
-- Icons dari [Lucide Icons](https://lucide.dev)
-- Framework [Laravel](https://laravel.com)
-- Styling dengan [TailwindCSS](https://tailwindcss.com)
+-   Icons dari [Lucide Icons](https://lucide.dev)
+-   Framework [Laravel](https://laravel.com)
+-   Styling dengan [TailwindCSS](https://tailwindcss.com)
 
 ---
 
 ⭐ Jika project ini membantu dan bermanfaat untuk pembelajaran, jangan lupa untuk memberikan star!
+
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{{ config('app.name') }} - @yield('title')</title>
 </head>

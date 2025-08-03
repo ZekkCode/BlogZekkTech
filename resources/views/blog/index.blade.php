@@ -30,20 +30,24 @@
                     <div class="md:w-48 md:flex-shrink-0">
                         <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}"
                             class="w-full h-48 md:h-32 object-cover rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-                            style="aspect-ratio: 4/3;">
+                            style="aspect-ratio: 1.91/1;"
+                            loading="lazy">
                     </div>
                     @endif
                     <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-3">
+                        <!-- Published Date - Always on top -->
+                        <div class="published-date">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span>Published {{ ($post->published_at ?? $post->created_at)->format('M d, Y') }}</span>
+                        </div>
+
+                        <!-- Categories - Separate line with proper wrapping -->
+                        <div class="category-tags">
                             @foreach($post->categories as $cat)
-                            <span class="px-3 py-1 text-xs font-medium rounded-full"
-                                style="background-color: var(--accent-color); color: white;">
-                                {{ $cat->name }}
-                            </span>
+                            <span class="category-tag">{{ $cat->name }}</span>
                             @endforeach
-                            <span class="text-sm" style="color: var(--text-secondary);">
-                                {{ $post->created_at->format('M d, Y') }}
-                            </span>
                         </div>
                         <h2 class="text-xl md:text-2xl font-bold mb-3">
                             <a href="{{ route('blog.show', $post->slug) }}"
@@ -54,15 +58,27 @@
                                 {{ $post->title }}
                             </a>
                         </h2>
-                        <p class="mb-4 leading-relaxed" style="color: var(--text-secondary);">
-                            {{ Str::limit(strip_tags($post->content), 200) }}
+                        @if($post->excerpt)
+                        <p class="text-base mb-4 leading-relaxed font-medium" style="color: var(--text-secondary);">
+                            {{ $post->excerpt }}
                         </p>
+                        @else
+                        <p class="text-base mb-4 leading-relaxed" style="color: var(--text-secondary);">
+                            {{ Str::limit(strip_tags($post->body), 200) }}
+                        </p>
+                        @endif
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
                             <div class="flex items-center gap-2">
+                                @if($post->user->avatar)
+                                <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}"
+                                    class="w-8 h-8 rounded-full object-cover border"
+                                    style="border-color: var(--accent-color);">
+                                @else
                                 <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white"
                                     style="background-color: var(--accent-color);">
                                     {{ substr($post->user->name, 0, 1) }}
                                 </div>
+                                @endif
                                 <span class="text-sm font-medium" style="color: var(--text-secondary);">
                                     {{ $post->user->name }}
                                 </span>
@@ -146,7 +162,7 @@
                                     {{ Str::limit($recent->title, 50) }}
                                 </h4>
                                 <p class="text-xs" style="color: var(--text-secondary);">
-                                    {{ $recent->created_at->format('M d, Y') }}
+                                    {{ ($recent->published_at ?? $recent->created_at)->format('M d, Y') }}
                                 </p>
                             </div>
                         </div>

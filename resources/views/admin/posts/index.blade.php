@@ -3,6 +3,72 @@
 @section('title', 'Manage Posts')
 
 @section('content')
+<style>
+    /* Admin table responsive styling */
+    .admin-table {
+        min-width: 100%;
+    }
+
+    .admin-table td {
+        vertical-align: top;
+    }
+
+    /* Category scroll container */
+    .category-scroll {
+        max-height: 4rem;
+        overflow-y: auto;
+    }
+
+    .category-scroll::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .category-scroll::-webkit-scrollbar-track {
+        background: var(--bg-primary);
+        border-radius: 2px;
+    }
+
+    .category-scroll::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 2px;
+    }
+
+    .category-scroll::-webkit-scrollbar-thumb:hover {
+        background: var(--text-secondary);
+    }
+
+    /* Published status styling */
+    .status-published {
+        background-color: rgba(34, 197, 94, 0.1);
+        border: 1px solid rgba(34, 197, 94, 0.2);
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+    }
+
+    .status-draft {
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .admin-table {
+            font-size: 0.875rem;
+        }
+
+        .admin-table td,
+        .admin-table th {
+            padding: 0.75rem 0.5rem;
+        }
+
+        .category-scroll {
+            max-height: 3rem;
+        }
+    }
+</style>
+
 <div class="max-w-6xl mx-auto">
     <div class="flex justify-between items-center mb-6">
         <div>
@@ -24,11 +90,10 @@
     @endif
 
     <div class="card rounded-lg overflow-hidden">
-        <table class="w-full text-left">
+        <table class="admin-table w-full text-left">
             <thead>
                 <tr style="border-bottom: 1px solid var(--border-color);">
-                    <th class="px-6 py-3" style="color: var(--text-primary);">Title</th>
-                    <th class="px-6 py-3" style="color: var(--text-primary);">Category</th>
+                    <th class="px-6 py-3" style="color: var(--text-primary);">Title & Categories</th>
                     <th class="px-6 py-3" style="color: var(--text-primary);">Published</th>
                     <th class="px-6 py-3" style="color: var(--text-primary);">Actions</th>
                 </tr>
@@ -39,13 +104,14 @@
                     onmouseover="this.style.backgroundColor='var(--bg-primary)'"
                     onmouseout="this.style.backgroundColor='transparent'">
                     <td class="px-6 py-4">
-                        <div class="font-medium" style="color: var(--text-primary);">{{ $post->title }}</div>
-                        <div class="text-sm" style="color: var(--text-secondary);">{{ Str::limit($post->excerpt, 60) }}</div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex flex-wrap gap-1">
+                        <div class="font-medium mb-2" style="color: var(--text-primary);">{{ $post->title }}</div>
+                        @if($post->excerpt)
+                        <div class="text-sm mb-2" style="color: var(--text-secondary);">{{ Str::limit($post->excerpt, 80) }}</div>
+                        @endif
+                        <!-- Categories with max height and scroll if needed -->
+                        <div class="category-scroll flex flex-wrap gap-1">
                             @foreach($post->categories as $category)
-                            <span class="px-2 py-1 text-xs rounded-full" style="background-color: var(--bg-primary); color: var(--text-secondary);">
+                            <span class="px-2 py-1 text-xs rounded-full whitespace-nowrap" style="background-color: var(--accent-color); color: white;">
                                 {{ $category->name }}
                             </span>
                             @endforeach
@@ -53,13 +119,29 @@
                     </td>
                     <td class="px-6 py-4">
                         @if($post->published_at)
-                        <span class="px-2 py-1 text-xs rounded-full bg-green-900 text-green-300">
-                            {{ $post->published_at->format('Y-m-d') }}
-                        </span>
+                        <div class="status-published">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <div>
+                                    <div class="text-sm font-medium text-green-600">Published</div>
+                                    <div class="text-xs" style="color: var(--text-secondary);">{{ $post->published_at->format('M d, Y') }}</div>
+                                </div>
+                            </div>
+                        </div>
                         @else
-                        <span class="px-2 py-1 text-xs rounded-full" style="background-color: var(--bg-primary); color: var(--text-secondary);">
-                            Draft
-                        </span>
+                        <div class="status-draft">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <div>
+                                    <div class="text-sm font-medium" style="color: var(--text-secondary);">Draft</div>
+                                    <div class="text-xs" style="color: var(--text-secondary);">Not published</div>
+                                </div>
+                            </div>
+                        </div>
                         @endif
                     </td>
                     <td class="px-6 py-4">
@@ -97,7 +179,7 @@
 
                 @if($posts->count() == 0)
                 <tr>
-                    <td colspan="4" class="px-6 py-8 text-center" style="color: var(--text-secondary);">
+                    <td colspan="3" class="px-6 py-8 text-center" style="color: var(--text-secondary);">
                         No posts found. <a href="{{ route('admin.posts.create') }}" style="color: var(--accent-color);">Create your first post</a>.
                     </td>
                 </tr>

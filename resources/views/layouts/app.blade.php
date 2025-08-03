@@ -303,6 +303,65 @@
         .social-links a:hover {
             opacity: 0.7;
         }
+
+        /* ===== POST & ARTICLE STYLES ===== */
+        .card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Published date styling */
+        .published-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .published-date svg {
+            flex-shrink: 0;
+            width: 1rem;
+            height: 1rem;
+        }
+
+        /* Category tags styling */
+        .category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-tag {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: 9999px;
+            background-color: var(--accent-color);
+            color: white;
+            white-space: nowrap;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .published-date {
+                font-size: 0.75rem;
+            }
+
+            .category-tag {
+                padding: 0.125rem 0.5rem;
+                font-size: 0.625rem;
+            }
+        }
     </style>
 </head>
 

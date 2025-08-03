@@ -18,8 +18,9 @@ class TestAdminSeeder extends Seeder
 
         // Buat admin baru untuk testing
         User::create([
-            'name' => 'Admin Test',
+            'name' => 'ZakariaMP',
             'email' => 'admin@blogzekktech.com',
+            'avatar' => 'https://media.licdn.com/dms/image/v2/D5603AQF90iK4P4muvA/profile-displayphoto-shrink_200_200/B56ZRC4gmAGoAg-/0/1736288898198?e=2147483647&v=beta&t=Y6_QrNwc1Oma9Df_Wp-6R9nAleVKTSMDuK5ClCJTLvc',
             'password' => Hash::make('admin123'),
             'is_admin' => true,
             'theme_preference' => 'light',

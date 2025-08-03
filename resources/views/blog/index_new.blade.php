@@ -27,20 +27,25 @@
                     @if($post->image)
                     <div class="md:w-48 md:flex-shrink-0">
                         <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}"
-                            class="w-full h-48 md:h-32 object-cover rounded-lg shadow-md transition-transform duration-300 hover:scale-105">
+                            class="w-full h-48 md:h-32 object-cover rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
+                            style="aspect-ratio: 1.91/1;"
+                            loading="lazy">
                     </div>
                     @endif
                     <div class="flex-1">
-                        <div class="flex flex-wrap items-center gap-2 sm:gap-3 mb-3">
+                        <!-- Published Date - Always on top -->
+                        <div class="published-date">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span>Published {{ ($post->published_at ?? $post->created_at)->format('M d, Y') }}</span>
+                        </div>
+
+                        <!-- Categories - Separate line with proper wrapping -->
+                        <div class="category-tags">
                             @foreach($post->categories as $cat)
-                            <span class="px-2 sm:px-3 py-1 text-xs font-medium rounded-full"
-                                style="background-color: var(--accent-color); color: white;">
-                                {{ $cat->name }}
-                            </span>
+                            <span class="category-tag">{{ $cat->name }}</span>
                             @endforeach
-                            <span class="text-xs sm:text-sm" style="color: var(--text-secondary);">
-                                {{ $post->created_at->format('M d, Y') }}
-                            </span>
                         </div>
                         <h2 class="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3">
                             <a href="{{ route('blog.show', $post->slug) }}"
@@ -51,15 +56,27 @@
                                 {{ $post->title }}
                             </a>
                         </h2>
-                        <p class="mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base" style="color: var(--text-secondary);">
-                            {{ Str::limit(strip_tags($post->content), 150) }}
+                        @if($post->excerpt)
+                        <p class="mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base font-medium" style="color: var(--text-secondary);">
+                            {{ $post->excerpt }}
                         </p>
+                        @else
+                        <p class="mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base" style="color: var(--text-secondary);">
+                            {{ Str::limit(strip_tags($post->body), 150) }}
+                        </p>
+                        @endif
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
                             <div class="flex items-center gap-2">
+                                @if($post->user->avatar)
+                                <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}"
+                                    class="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover border"
+                                    style="border-color: var(--accent-color);">
+                                @else
                                 <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold text-white"
                                     style="background-color: var(--accent-color);">
                                     {{ substr($post->user->name, 0, 1) }}
                                 </div>
+                                @endif
                                 <span class="text-xs sm:text-sm font-medium" style="color: var(--text-secondary);">
                                     {{ $post->user->name }}
                                 </span>
@@ -143,7 +160,7 @@
                                     {{ Str::limit($recent->title, 45) }}
                                 </h4>
                                 <p class="text-xs" style="color: var(--text-secondary);">
-                                    {{ $recent->created_at->format('M d, Y') }}
+                                    {{ ($recent->published_at ?? $recent->created_at)->format('M d, Y') }}
                                 </p>
                             </div>
                         </div>
