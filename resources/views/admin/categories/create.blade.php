@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Create New Category')
+@section('title', 'Buat Kategori Baru')
 
 @section('content')
     <style>
@@ -72,13 +72,13 @@
     <div class="max-w-4xl mx-auto">
         <div class="rounded-lg p-4 sm:p-6"
             style="background-color: var(--bg-secondary); border: 1px solid var(--border-color);">
-            <h1 class="text-xl sm:text-2xl font-bold mb-6" style="color: var(--text-primary);">Create New Category</h1>
+            <h1 class="text-xl sm:text-2xl font-bold mb-6" style="color: var(--text-primary);">Buat Kategori Baru</h1>
 
             <form action="{{ route('admin.categories.store') }}" method="POST">
                 @csrf
 
                 <div class="mb-4">
-                    <label for="name" class="block mb-2" style="color: var(--text-primary);">Category Name</label>
+                    <label for="name" class="block mb-2" style="color: var(--text-primary);">Kategori Nama</label>
                     <input type="text" name="name" id="name"
                         class="form-input w-full rounded-lg px-4 py-2 transition-colors focus:outline-none"
                         style="background-color: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary);"
@@ -89,15 +89,16 @@
                 </div>
 
                 <div class="flex flex-col sm:flex-row items-center justify-end mt-6 gap-2 sm:gap-0">
-                    <a href="{{ route('admin.categories.index') }}"
-                        class="btn-cancel font-bold py-2 px-4 rounded-xl sm:mr-2 transition-colors w-full sm:w-auto text-center order-2 sm:order-1"
-                        style="background-color: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-secondary); text-decoration: none;">
-                        Cancel
+                    class="btn-cancel font-bold py-2 px-4 rounded-xl sm:mr-2 transition-colors w-full sm:w-auto text-center
+                    order-2 sm:order-1"
+                    style="background-color: var(--bg-secondary); color: var(--text-secondary); border: 1px solid
+                    var(--border-color);">
+                    Batal
                     </a>
                     <button type="submit"
                         class="btn-primary font-bold py-2 px-4 rounded-xl transition-colors w-full sm:w-auto order-1 sm:order-2"
-                        style="background-color: var(--accent-color); color: white; border: none; cursor: pointer;">
-                        Create Category
+                        style="background-color: var(--accent-color); color: white;">
+                        Buat Kategori
                     </button>
                 </div>
             </form>

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'BlogZekkTech') }} - @yield('title', 'Home')</title>
+    <title>{{ config('app.name', 'BlogZekkTech') }} - @yield('title', 'Beranda')</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -107,7 +107,8 @@
             background-color: var(--accent-color);
             color: white;
             transition: all 0.2s ease;
-            border-radius: 0.75rem; /* 12px - rounded-xl */
+            border-radius: 0.75rem;
+            /* 12px - rounded-xl */
         }
 
         .btn-primary:hover {
@@ -119,7 +120,8 @@
             color: var(--text-primary);
             border: 1px solid var(--border-color);
             transition: all 0.2s ease;
-            border-radius: 0.75rem; /* 12px - rounded-xl */
+            border-radius: 0.75rem;
+            /* 12px - rounded-xl */
         }
 
         .btn-secondary:hover {
@@ -127,8 +129,11 @@
         }
 
         /* Global button styling */
-        button, .btn, input[type="submit"] {
-            border-radius: 0.75rem !important; /* 12px - rounded-xl */
+        button,
+        .btn,
+        input[type="submit"] {
+            border-radius: 0.75rem !important;
+            /* 12px - rounded-xl */
         }
 
         /* Action buttons in admin */
@@ -138,7 +143,8 @@
             justify-content: center;
             width: 2.5rem;
             height: 2.5rem;
-            border-radius: 0.75rem; /* 12px - rounded-xl instead of 50% */
+            border-radius: 0.75rem;
+            /* 12px - rounded-xl instead of 50% */
             border: none;
             background: transparent;
             color: var(--text-secondary);
@@ -271,27 +277,27 @@
                 margin: 1rem;
                 max-width: calc(100vw - 2rem);
             }
-            
+
             #modalContent .px-6 {
                 padding-left: 1rem;
                 padding-right: 1rem;
             }
-            
+
             #modalContent .py-4 {
                 padding-top: 0.75rem;
                 padding-bottom: 0.75rem;
             }
-            
+
             #modalContent .py-6 {
                 padding-top: 1rem;
                 padding-bottom: 1rem;
             }
-            
+
             .modal-footer-buttons {
                 flex-direction: column;
                 gap: 0.5rem;
             }
-            
+
             .modal-footer-buttons button {
                 width: 100%;
                 padding: 0.75rem;
@@ -486,14 +492,14 @@
                     <span class="logo-text">ZekkTech</span>
                 </a>
                 <div class="nav-links-desktop">
-                    <a href="{{ route('home') }}" class="nav-link">Home</a>
+                    <a href="{{ route('home') }}" class="nav-link">Beranda</a>
                     @if(Auth::check() && Auth::user()->is_admin)
                         <a href="{{ route('admin.dashboard') }}" class="nav-link">Admin</a>
                     @else
-                        <a href="{{ route('admin.login') }}" class="nav-link">Login</a>
+                        <a href="{{ route('admin.login') }}" class="nav-link">Masuk</a>
                     @endif
                     <a href="#footer" class="nav-link"
-                        onclick="document.querySelector('footer').scrollIntoView({behavior: 'smooth'})">About</a>
+                        onclick="document.querySelector('footer').scrollIntoView({behavior: 'smooth'})">Tentang</a>
                     <a href="https://github.com/zekkcode" target="_blank" class="nav-link flex items-center gap-1">
                         GitHub
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -548,7 +554,7 @@
         <div class="mobile-menu" id="mobileMenu">
             <div class="mobile-menu-panel">
                 <a href="{{ route('home') }}" class="mobile-nav-link">
-                    <span>Home</span>
+                    <span>Beranda</span>
                     <span class="mobile-nav-link-arrow">&gt;</span>
                 </a>
                 @if(Auth::check() && Auth::user()->is_admin)
@@ -559,18 +565,18 @@
                     <form method="POST" action="{{ route('admin.logout') }}" class="block">
                         @csrf
                         <button type="submit" class="mobile-nav-link w-full text-left">
-                            <span>Logout</span>
+                            <span>Keluar</span>
                             <span class="mobile-nav-link-arrow">&gt;</span>
                         </button>
                     </form>
                 @else
                     <a href="{{ route('admin.login') }}" class="mobile-nav-link">
-                        <span>Login</span>
+                        <span>Masuk</span>
                         <span class="mobile-nav-link-arrow">&gt;</span>
                     </a>
                 @endif
                 <a href="#about" class="mobile-nav-link">
-                    <span>About</span>
+                    <span>Tentang Website</span>
                     <span class="mobile-nav-link-arrow">&gt;</span>
                 </a>
                 <a href="https://github.com/zekkcode" target="_blank" class="mobile-nav-link">
@@ -607,9 +613,8 @@
                             style="color: var(--text-primary);">{{ config('app.name', 'ZekkTech') }}</span>
                     </div>
                     <p class="text-sm max-w-md" style="color: var(--text-secondary);">
-                        ZekkTech adalah platform artikel gratis yang menyediakan informasi teknologi terkini, tutorial,
-                        dan insight mendalam untuk membantu Anda belajar dan berkembang di dunia digital. Berbagi ilmu,
-                        membangun masa depan teknologi bersama.
+                        ZekkTech adalah platform artikel gratis yang menyediakan Informasi Teknologi Terkini, Tutorial,
+                        dan Wawasan di dunia digital.
                     </p>
                     <!-- Social Links Section -->
                     <div class="social-links">
@@ -671,13 +676,13 @@
                         <div class="flex flex-col sm:flex-row justify-between items-center text-xs space-y-2 sm:space-y-0"
                             style="color: var(--text-secondary);">
                             <div class="flex items-center space-x-1">
-                                <span>&copy; {{ date('Y') }} {{ config('app.name', 'ZekkTech') }}. All Rights
-                                    Reserved.</span>
+                                <span>&copy; {{ date('Y') }} {{ config('app.name', 'ZekkTech') }}. Semua Hak
+                                    Dilindungi.</span>
                             </div>
                             <div class="flex items-center space-x-1">
-                                <span>Powered by</span>
+                                <span>Dibuat dengan</span>
                                 <a href="https://laravel.com" target="_blank"
-                                    class="hover:opacity-70 transition-opacity">PHP&Laravel12</a>
+                                    class="hover:opacity-70 transition-opacity">PHP & Laravel</a>
                                 <span>&</span>
                                 <span class="hover:opacity-70 transition-opacity">ZakariaMP</span>
                             </div>
@@ -692,43 +697,44 @@
     <div id="customModal" class="fixed inset-0 z-[9999] hidden">
         <!-- Backdrop -->
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-        
+
         <!-- Modal Container -->
         <div class="relative flex items-center justify-center min-h-screen p-4">
             <div class="relative max-w-md w-full mx-auto">
                 <!-- Modal Content -->
-                <div id="modalContent" class="rounded-xl p-6 shadow-2xl border transform transition-all duration-300 scale-95 opacity-0" 
-                     style="background-color: var(--bg-secondary); border-color: var(--border-color);">
+                <div id="modalContent"
+                    class="rounded-xl p-6 shadow-2xl border transform transition-all duration-300 scale-95 opacity-0"
+                    style="background-color: var(--bg-secondary); border-color: var(--border-color);">
                     <!-- Modal Header -->
                     <div class="flex items-center mb-4">
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center mr-3" 
-                             style="background-color: var(--accent-color);">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center mr-3"
+                            style="background-color: var(--accent-color);">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
                             </svg>
                         </div>
                         <h3 id="modalTitle" class="text-lg font-semibold" style="color: var(--text-primary);">
-                            Confirm Action
+                            Konfirmasi Tindakan?
                         </h3>
                     </div>
-                    
+
                     <!-- Modal Body -->
                     <div class="mb-6">
                         <p id="modalMessage" class="text-sm leading-relaxed" style="color: var(--text-secondary);">
-                            Are you sure you want to proceed with this action?
+                            Apakah Anda yakin ingin melanjutkan tindakan ini?
                         </p>
                     </div>
-                    
+
                     <!-- Modal Actions -->
                     <div class="flex flex-col sm:flex-row gap-3 sm:gap-2 sm:justify-end">
-                        <button id="modalCancel" type="button" 
-                                class="btn-secondary font-medium py-2 px-4 rounded-xl w-full sm:w-auto order-2 sm:order-1">
-                            Cancel
+                        <button id="modalCancel" type="button"
+                            class="btn-secondary font-medium py-2 px-4 rounded-xl w-full sm:w-auto order-2 sm:order-1">
+                            Batal
                         </button>
-                        <button id="modalConfirm" type="button" 
-                                class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-xl w-full sm:w-auto order-1 sm:order-2 transition-colors">
-                            Delete
+                        <button id="modalConfirm" type="button"
+                            class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-xl w-full sm:w-auto order-1 sm:order-2 transition-colors">
+                            Hapus
                         </button>
                     </div>
                 </div>
@@ -981,14 +987,14 @@
                         </svg>
                     </div>
                     <h3 id="modalTitle" class="text-lg font-semibold" style="color: var(--text-primary);">
-                        Confirm Action
+                        Konfirmasi Aksi?
                     </h3>
                 </div>
 
                 <!-- Body -->
                 <div class="px-6 py-6">
                     <p id="modalMessage" style="color: var(--text-secondary); line-height: 1.6;">
-                        Are you sure you want to continue?
+                        Apakah Anda yakin ingin melanjutkan?
                     </p>
                 </div>
 
@@ -998,12 +1004,12 @@
                     <button id="modalCancel" type="button"
                         class="px-6 py-2.5 text-sm font-medium rounded-xl border transition-all duration-200 hover:shadow-md focus:ring-2 focus:ring-offset-2"
                         style="background-color: var(--bg-secondary); color: var(--text-secondary); border-color: var(--border-color); focus:ring-color: var(--accent-color);">
-                        Cancel
+                        Batal
                     </button>
                     <button id="modalConfirm" type="button"
                         class="px-6 py-2.5 text-sm font-medium text-white rounded-xl transition-all duration-200 hover:shadow-md focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                         style="background-color: #dc2626;">
-                        Delete
+                        Hapus
                     </button>
                 </div>
             </div>

@@ -87,7 +87,7 @@
                 @method('PUT')
 
                 <div class="mb-4">
-                    <label for="title" class="block mb-2" style="color: var(--text-primary);">Title</label>
+                    <label for="title" class="block mb-2" style="color: var(--text-primary);">Judul</label>
                     <input type="text" name="title" id="title"
                         class="w-full rounded-lg px-4 py-2 transition-colors focus:outline-none focus:ring-2"
                         style="background-color: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary);"
@@ -95,7 +95,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="categories" class="block mb-2" style="color: var(--text-primary);">Categories</label>
+                    <label for="categories" class="block mb-2" style="color: var(--text-primary);">Kategori</label>
                     <select name="categories[]" id="categories" class="w-full rounded-lg px-4 py-2"
                         style="background-color: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary);"
                         multiple size="5">
@@ -110,7 +110,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="excerpt" class="block mb-2" style="color: var(--text-primary);">Excerpt (Summary)</label>
+                    <label for="excerpt" class="block mb-2" style="color: var(--text-primary);">Ringkasan</label>
                     <textarea name="excerpt" id="excerpt" rows="3"
                         class="w-full rounded-lg px-4 py-2 transition-colors focus:outline-none focus:ring-2"
                         style="background-color: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary);"
@@ -118,7 +118,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="body" class="block mb-2" style="color: var(--text-primary);">Body (Markdown)</label>
+                    <label for="body" class="block mb-2" style="color: var(--text-primary);">Konten (Markdown)</label>
                     <textarea name="body" id="body" rows="15"
                         class="w-full rounded-lg px-4 py-2 font-mono transition-colors focus:outline-none focus:ring-2"
                         style="background-color: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary);"
@@ -126,12 +126,12 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="image" class="block mb-2" style="color: var(--text-primary);">Featured Image</label>
+                    <label for="image" class="block mb-2" style="color: var(--text-primary);">Gambar Unggulan</label>
                     @if($post->image)
                         <div class="mb-2">
                             <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}"
                                 class="h-24 sm:h-32 rounded-lg">
-                            <div class="mt-1 text-sm" style="color: var(--text-secondary);">Current image</div>
+                            <div class="mt-1 text-sm" style="color: var(--text-secondary);">Gambar saat ini</div>
                         </div>
                     @endif
                     <input type="file" name="image" id="image" class="w-full rounded-lg px-4 py-2"
@@ -139,7 +139,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="block mb-2" style="color: var(--text-primary);">Publication Status</label>
+                    <label class="block mb-2" style="color: var(--text-primary);">Status Publikasi</label>
                     <div class="flex items-center">
                         <input type="checkbox" name="is_published" id="is_published" class="mr-2" {{ $post->published_at ? 'checked' : '' }}>
                         <label for="is_published"
@@ -149,9 +149,9 @@
 
                 <div class="flex flex-col sm:flex-row items-center justify-end mt-6 gap-2 sm:gap-0">
                     <a href="{{ route('admin.posts.index') }}"
-                        class="btn-secondary font-bold py-2 px-4 rounded-xl sm:mr-2 w-full sm:w-auto text-center order-2 sm:order-1">Cancel</a>
+                        class="btn-secondary font-bold py-2 px-4 rounded-xl sm:mr-2 w-full sm:w-auto text-center order-2 sm:order-1">Batal</a>
                     <button type="submit"
-                        class="btn-primary font-bold py-2 px-4 rounded-xl w-full sm:w-auto order-1 sm:order-2">Update
+                        class="btn-primary font-bold py-2 px-4 rounded-xl w-full sm:w-auto order-1 sm:order-2">Perbarui
                         Post</button>
                 </div>
             </form>

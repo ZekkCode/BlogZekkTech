@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Category: ' . $category->name)
+@section('title', 'Edit Kategori: ' . $category->name)
 
 @section('content')
     <style>
@@ -62,15 +62,16 @@
 
     <div class="max-w-4xl mx-auto">
         <div class="card rounded-lg p-4 sm:p-6">
-            <h1 class="text-xl sm:text-2xl font-bold mb-6" style="color: var(--text-primary);">Edit Category:
-                {{ $category->name }}</h1>
+            <h1 class="text-xl sm:text-2xl font-bold mb-6" style="color: var(--text-primary);">Edit Kategori:
+                {{ $category->name }}
+            </h1>
 
             <form action="{{ route('admin.categories.update', $category->id) }}" method="POST">
                 @csrf
                 @method('PUT')
 
                 <div class="mb-4">
-                    <label for="name" class="block mb-2" style="color: var(--text-primary);">Category Name</label>
+                    <label for="name" class="block mb-2" style="color: var(--text-primary);">Nama Kategori</label>
                     <input type="text" name="name" id="name"
                         class="w-full rounded-lg px-4 py-2 transition-colors focus:outline-none focus:ring-2"
                         style="background-color: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary);"
@@ -81,16 +82,16 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="block mb-2" style="color: var(--text-primary);">Category Slug</label>
+                    <label class="block mb-2" style="color: var(--text-primary);">Kategori Slug</label>
                     <div class="rounded-lg px-4 py-2"
                         style="background-color: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-secondary);">
                         {{ $category->slug }}
-                        <p class="text-sm mt-1">Slug is automatically generated from the name.</p>
+                        <p class="text-sm mt-1">Slug dihasilkan secara otomatis dari nama.</p>
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label class="block mb-2" style="color: var(--text-primary);">Posts in Category</label>
+                    <label class="block mb-2" style="color: var(--text-primary);">Kategori Postingan</label>
                     <div class="rounded-lg px-4 py-2"
                         style="background-color: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary);">
                         {{ $category->posts()->count() }}
@@ -99,10 +100,10 @@
 
                 <div class="flex flex-col sm:flex-row items-center justify-end mt-6 gap-2 sm:gap-0">
                     <a href="{{ route('admin.categories.index') }}"
-                        class="btn-secondary font-bold py-2 px-4 rounded-xl sm:mr-2 w-full sm:w-auto text-center order-2 sm:order-1">Cancel</a>
+                        class="btn-secondary font-bold py-2 px-4 rounded-xl sm:mr-2 w-full sm:w-auto text-center order-2 sm:order-1">Batal</a>
                     <button type="submit"
-                        class="btn-primary font-bold py-2 px-4 rounded-xl w-full sm:w-auto order-1 sm:order-2">Update
-                        Category</button>
+                        class="btn-primary font-bold py-2 px-4 rounded-xl w-full sm:w-auto order-1 sm:order-2">Perbarui
+                        Kategori</button>
                 </div>
             </form>
         </div>

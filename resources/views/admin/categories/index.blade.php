@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Manage Categories')
+@section('title', 'Kelola Kategori')
 
 @section('content')
     <style>
@@ -112,14 +112,14 @@
     <div class="max-w-4xl mx-auto">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <div>
-                <h1 class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary);">Manage Categories</h1>
+                <h1 class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary);">Kelola Kategori</h1>
                 <a href="{{ asset('admin_guide.html') }}" target="_blank" class="text-sm transition-colors"
                     style="color: var(--accent-color);" onmouseover="this.style.textDecoration='underline'"
-                    onmouseout="this.style.textDecoration='none'">View Admin Guide</a>
+                    onmouseout="this.style.textDecoration='none'">Lihat Panduan Admin</a>
             </div>
             <a href="{{ route('admin.categories.create') }}"
                 class="btn-primary font-bold py-2 px-3 sm:px-4 rounded-xl text-sm sm:text-base w-full sm:w-auto text-center">
-                Create New Category
+                Buat Kategori Baru
             </a>
         </div>
 
@@ -139,10 +139,10 @@
             <table class="categories-table w-full text-left">
                 <thead>
                     <tr style="border-bottom: 1px solid var(--border-color);">
-                        <th class="px-6 py-3" style="color: var(--text-primary);">Name</th>
+                        <th class="px-6 py-3" style="color: var(--text-primary);">Nama</th>
                         <th class="px-6 py-3" style="color: var(--text-primary);">Slug</th>
                         <th class="px-6 py-3" style="color: var(--text-primary);">Posts</th>
-                        <th class="px-6 py-3" style="color: var(--text-primary);">Actions</th>
+                        <th class="px-6 py-3" style="color: var(--text-primary);">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -175,7 +175,7 @@
                                         </svg>
                                     </a>
                                     <a href="{{ route('admin.categories.edit', $category->id) }}"
-                                        class="text-amber-400 hover:text-amber-300" title="Edit Category">
+                                        class="text-amber-400 hover:text-amber-300" title="Edit Kategori">
                                         <span class="sr-only">Edit</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                             fill="currentColor">
@@ -188,9 +188,9 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" class="text-red-400 hover:text-red-300"
-                                            onclick="customConfirm('Are you sure you want to delete this category? This will NOT delete associated posts.', function(result) { if(result) document.getElementById('deleteForm{{ $category->id }}').submit(); })"
-                                            title="Delete Category">
-                                            <span class="sr-only">Delete</span>
+                                            onclick="customConfirm('Apakah Anda yakin ingin menghapus kategori ini? Ini TIDAK akan menghapus postingan terkait.', function(result) { if(result) document.getElementById('deleteForm{{ $category->id }}').submit(); })"
+                                            title="Hapus Kategori">
+                                            <span class="sr-only">Hapus</span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                                 fill="currentColor">
                                                 <path fill-rule="evenodd"
@@ -207,8 +207,8 @@
                     @if($categories->count() == 0)
                         <tr>
                             <td colspan="4" class="px-6 py-8 text-center" style="color: var(--text-secondary);">
-                                No categories found. <a href="{{ route('admin.categories.create') }}"
-                                    style="color: var(--accent-color);">Create your first category</a>.
+                                Tidak ada kategori ditemukan. <a href="{{ route('admin.categories.create') }}"
+                                    style="color: var(--accent-color);">Buat kategori pertama Anda</a>.
                             </td>
                         </tr>
                     @endif
