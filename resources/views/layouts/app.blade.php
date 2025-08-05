@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-    class="{{
-        Auth::check()
-            ? (Auth::user()->theme_preference === 'light' ? '' : (Auth::user()->theme_preference === 'warm' ? 'warm' : 'dark'))
-            : (session('theme') === 'light' ? '' : (session('theme') === 'warm' ? 'warm' : 'dark'))
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{
+    Auth::check()
+    ? (Auth::user()->theme_preference === 'light' ? '' : (Auth::user()->theme_preference === 'warm' ? 'warm' : 'dark'))
+    : (session('theme') === 'light' ? '' : (session('theme') === 'warm' ? 'warm' : 'dark'))
     }}">
 
 <head>
@@ -103,6 +102,55 @@
             /* Hidden by default */
         }
 
+        /* Admin-specific responsive adjustments */
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+            transition: all 0.2s ease;
+            border-radius: 0.75rem; /* 12px - rounded-xl */
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+            border-radius: 0.75rem; /* 12px - rounded-xl */
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        /* Global button styling */
+        button, .btn, input[type="submit"] {
+            border-radius: 0.75rem !important; /* 12px - rounded-xl */
+        }
+
+        /* Action buttons in admin */
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.75rem; /* 12px - rounded-xl instead of 50% */
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
         @media (min-width: 1024px) {
             .header-container {
                 padding: 1.5rem 1.5rem;
@@ -197,6 +245,68 @@
             border-color: var(--accent-color) !important;
             box-shadow: 0 0 0 2px var(--accent-color);
             width: 16rem !important;
+        }
+
+        /* Custom Modal Styles */
+        .modal-backdrop {
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-backdrop.modal-show {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content-show {
+            transform: scale(1) !important;
+            opacity: 1 !important;
+        }
+
+        /* Mobile responsive modal */
+        @media (max-width: 480px) {
+            #modalContent {
+                margin: 1rem;
+                max-width: calc(100vw - 2rem);
+            }
+            
+            #modalContent .px-6 {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            #modalContent .py-4 {
+                padding-top: 0.75rem;
+                padding-bottom: 0.75rem;
+            }
+            
+            #modalContent .py-6 {
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+            }
+            
+            .modal-footer-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .modal-footer-buttons button {
+                width: 100%;
+                padding: 0.75rem;
+            }
+        }
+
+        /* Button hover effects */
+        #modalCancel:hover {
+            background-color: var(--bg-primary);
+            border-color: var(--accent-color);
+        }
+
+        #modalConfirm:hover {
+            background-color: #b91c1c;
+            transform: translateY(-1px);
         }
 
         .action-btn {
@@ -378,14 +488,16 @@
                 <div class="nav-links-desktop">
                     <a href="{{ route('home') }}" class="nav-link">Home</a>
                     @if(Auth::check() && Auth::user()->is_admin)
-                    <a href="{{ route('admin.dashboard') }}" class="nav-link">Admin</a>
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link">Admin</a>
                     @else
-                    <a href="{{ route('admin.login') }}" class="nav-link">Login</a>
+                        <a href="{{ route('admin.login') }}" class="nav-link">Login</a>
                     @endif
-                    <a href="#footer" class="nav-link" onclick="document.querySelector('footer').scrollIntoView({behavior: 'smooth'})">About</a>
+                    <a href="#footer" class="nav-link"
+                        onclick="document.querySelector('footer').scrollIntoView({behavior: 'smooth'})">About</a>
                     <a href="https://github.com/zekkcode" target="_blank" class="nav-link flex items-center gap-1">
                         GitHub
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                             <polyline points="15 3 21 3 21 9"></polyline>
                             <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -395,12 +507,16 @@
                 <div class="header-actions">
                     <div class="search-container">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-4 w-4" style="color: var(--text-secondary);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            <svg class="h-4 w-4" style="color: var(--text-secondary);" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </div>
                         <input type="text" id="searchInput" placeholder="Search..." class="search-input">
-                        <div id="searchResults" class="absolute top-full left-0 right-0 mt-2 rounded-lg shadow-xl hidden max-h-96 overflow-y-auto z-50" style="background-color: var(--bg-secondary); border: 1px solid var(--border-color);"></div>
+                        <div id="searchResults"
+                            class="absolute top-full left-0 right-0 mt-2 rounded-lg shadow-xl hidden max-h-96 overflow-y-auto z-50"
+                            style="background-color: var(--bg-secondary); border: 1px solid var(--border-color);"></div>
                     </div>
                     <button id="themeToggle" type="button" class="action-btn" onclick="toggleTheme()">
                         <span id="themeIconDesktop"></span>
@@ -420,7 +536,8 @@
                     </button>
                     <button type="button" class="action-btn mobile-menu-toggle" onclick="toggleMobileMenu()">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
                 </div>
@@ -435,22 +552,22 @@
                     <span class="mobile-nav-link-arrow">&gt;</span>
                 </a>
                 @if(Auth::check() && Auth::user()->is_admin)
-                <a href="{{ route('admin.dashboard') }}" class="mobile-nav-link">
-                    <span>Admin</span>
-                    <span class="mobile-nav-link-arrow">&gt;</span>
-                </a>
-                <form method="POST" action="{{ route('admin.logout') }}" class="block">
-                    @csrf
-                    <button type="submit" class="mobile-nav-link w-full text-left">
-                        <span>Logout</span>
+                    <a href="{{ route('admin.dashboard') }}" class="mobile-nav-link">
+                        <span>Admin</span>
                         <span class="mobile-nav-link-arrow">&gt;</span>
-                    </button>
-                </form>
+                    </a>
+                    <form method="POST" action="{{ route('admin.logout') }}" class="block">
+                        @csrf
+                        <button type="submit" class="mobile-nav-link w-full text-left">
+                            <span>Logout</span>
+                            <span class="mobile-nav-link-arrow">&gt;</span>
+                        </button>
+                    </form>
                 @else
-                <a href="{{ route('admin.login') }}" class="mobile-nav-link">
-                    <span>Login</span>
-                    <span class="mobile-nav-link-arrow">&gt;</span>
-                </a>
+                    <a href="{{ route('admin.login') }}" class="mobile-nav-link">
+                        <span>Login</span>
+                        <span class="mobile-nav-link-arrow">&gt;</span>
+                    </a>
                 @endif
                 <a href="#about" class="mobile-nav-link">
                     <span>About</span>
@@ -458,7 +575,8 @@
                 </a>
                 <a href="https://github.com/zekkcode" target="_blank" class="mobile-nav-link">
                     <span>GitHub</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                         <polyline points="15 3 21 3 21 9"></polyline>
                         <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -468,11 +586,11 @@
         </div>
 
         @hasSection('admin_nav')
-        @yield('admin_nav')
+            @yield('admin_nav')
         @endif
 
         <main class="flex-grow">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
                 <div class="max-w-7xl mx-auto">
                     @yield('content')
                 </div>
@@ -483,56 +601,83 @@
             <div class="max-w-6xl mx-auto px-6 py-12">
                 <div class="flex flex-col items-center text-center space-y-4">
                     <div class="flex items-center space-x-3">
-                        <img src="{{ asset('images/zekktech-logo-fixed.svg') }}" alt="ZekkTech Logo" class="h-8 w-8 object-contain">
-                        <span class="text-lg font-semibold" style="color: var(--text-primary);">{{ config('app.name', 'ZekkTech') }}</span>
+                        <img src="{{ asset('images/zekktech-logo-fixed.svg') }}" alt="ZekkTech Logo"
+                            class="h-8 w-8 object-contain">
+                        <span class="text-lg font-semibold"
+                            style="color: var(--text-primary);">{{ config('app.name', 'ZekkTech') }}</span>
                     </div>
                     <p class="text-sm max-w-md" style="color: var(--text-secondary);">
-                        ZekkTech adalah platform artikel gratis yang menyediakan informasi teknologi terkini, tutorial, dan insight mendalam untuk membantu Anda belajar dan berkembang di dunia digital. Berbagi ilmu, membangun masa depan teknologi bersama.
+                        ZekkTech adalah platform artikel gratis yang menyediakan informasi teknologi terkini, tutorial,
+                        dan insight mendalam untuk membantu Anda belajar dan berkembang di dunia digital. Berbagi ilmu,
+                        membangun masa depan teknologi bersama.
                     </p>
                     <!-- Social Links Section -->
                     <div class="social-links">
                         <!-- GitHub -->
-                        <a href="https://github.com/zekkcode" target="_blank" aria-label="GitHub" style="color: var(--text-secondary);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                        <a href="https://github.com/zekkcode" target="_blank" aria-label="GitHub"
+                            style="color: var(--text-secondary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                                </path>
                             </svg>
                         </a>
                         <!-- Email -->
-                        <a href="mailto:zakariamujur6@gmail.com" aria-label="Email" style="color: var(--text-secondary);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <a href="mailto:zakariamujur6@gmail.com" aria-label="Email"
+                            style="color: var(--text-secondary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                </path>
                                 <polyline points="22,6 12,13 2,6"></polyline>
                             </svg>
                         </a>
                         <!-- Instagram -->
-                        <a href="https://instagram.com/zekksparow" target="_blank" aria-label="Instagram" style="color: var(--text-secondary);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <a href="https://instagram.com/zekksparow" target="_blank" aria-label="Instagram"
+                            style="color: var(--text-secondary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
                                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                             </svg>
                         </a>
                         <!-- TikTok -->
-                        <a href="https://tiktok.com/@zekksparow" target="_blank" aria-label="TikTok" style="color: var(--text-secondary);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <a href="https://tiktok.com/@zekksparow" target="_blank" aria-label="TikTok"
+                            style="color: var(--text-secondary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
                             </svg>
                         </a>
                         <!-- WhatsApp -->
-                        <a href="https://wa.me/62881081772005" target="_blank" aria-label="WhatsApp" style="color: var(--text-secondary);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                        <a href="https://wa.me/62881081772005" target="_blank" aria-label="WhatsApp"
+                            style="color: var(--text-secondary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                                </path>
                             </svg>
                         </a>
                     </div>
                     <div class="pt-6 border-t w-full" style="border-color: var(--border-color);">
-                        <div class="flex flex-col sm:flex-row justify-between items-center text-xs space-y-2 sm:space-y-0" style="color: var(--text-secondary);">
+                        <div class="flex flex-col sm:flex-row justify-between items-center text-xs space-y-2 sm:space-y-0"
+                            style="color: var(--text-secondary);">
                             <div class="flex items-center space-x-1">
-                                <span>&copy; {{ date('Y') }} {{ config('app.name', 'ZekkTech') }}. All Rights Reserved.</span>
+                                <span>&copy; {{ date('Y') }} {{ config('app.name', 'ZekkTech') }}. All Rights
+                                    Reserved.</span>
                             </div>
                             <div class="flex items-center space-x-1">
                                 <span>Powered by</span>
-                                <a href="https://laravel.com" target="_blank" class="hover:opacity-70 transition-opacity">PHP&Laravel12</a>
+                                <a href="https://laravel.com" target="_blank"
+                                    class="hover:opacity-70 transition-opacity">PHP&Laravel12</a>
                                 <span>&</span>
                                 <span class="hover:opacity-70 transition-opacity">ZakariaMP</span>
                             </div>
@@ -543,8 +688,56 @@
         </footer>
     </div>
 
+    <!-- Custom Modal for Confirmations -->
+    <div id="customModal" class="fixed inset-0 z-[9999] hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+        
+        <!-- Modal Container -->
+        <div class="relative flex items-center justify-center min-h-screen p-4">
+            <div class="relative max-w-md w-full mx-auto">
+                <!-- Modal Content -->
+                <div id="modalContent" class="rounded-xl p-6 shadow-2xl border transform transition-all duration-300 scale-95 opacity-0" 
+                     style="background-color: var(--bg-secondary); border-color: var(--border-color);">
+                    <!-- Modal Header -->
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center mr-3" 
+                             style="background-color: var(--accent-color);">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                            </svg>
+                        </div>
+                        <h3 id="modalTitle" class="text-lg font-semibold" style="color: var(--text-primary);">
+                            Confirm Action
+                        </h3>
+                    </div>
+                    
+                    <!-- Modal Body -->
+                    <div class="mb-6">
+                        <p id="modalMessage" class="text-sm leading-relaxed" style="color: var(--text-secondary);">
+                            Are you sure you want to proceed with this action?
+                        </p>
+                    </div>
+                    
+                    <!-- Modal Actions -->
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-2 sm:justify-end">
+                        <button id="modalCancel" type="button" 
+                                class="btn-secondary font-medium py-2 px-4 rounded-xl w-full sm:w-auto order-2 sm:order-1">
+                            Cancel
+                        </button>
+                        <button id="modalConfirm" type="button" 
+                                class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-xl w-full sm:w-auto order-1 sm:order-2 transition-colors">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const themes = [{
                 name: 'light',
                 icon: '☀️'
@@ -568,7 +761,7 @@
                 }
             }
 
-            window.toggleTheme = function() {
+            window.toggleTheme = function () {
                 const currentIndex = themes.findIndex(t => t.name === currentThemeName);
                 const nextTheme = themes[(currentIndex + 1) % themes.length];
                 changeTheme(nextTheme.name);
@@ -576,15 +769,15 @@
 
             function changeTheme(theme) {
                 fetch('{{ route("theme.set") }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({
-                            theme: theme
-                        })
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        theme: theme
                     })
+                })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
@@ -598,13 +791,13 @@
             const mobileMenu = document.getElementById('mobileMenu');
             const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
 
-            window.toggleMobileMenu = function() {
+            window.toggleMobileMenu = function () {
                 const isShown = mobileMenu.classList.toggle('show');
                 document.body.style.overflow = isShown ? 'hidden' : '';
             }
 
             // Close menu when clicking on the overlay
-            mobileMenu.addEventListener('click', function(event) {
+            mobileMenu.addEventListener('click', function (event) {
                 if (event.target === mobileMenu) {
                     toggleMobileMenu();
                 }
@@ -626,7 +819,7 @@
             let searchTimeout;
 
             if (searchInput) {
-                searchInput.addEventListener('input', function() {
+                searchInput.addEventListener('input', function () {
                     clearTimeout(searchTimeout);
                     const query = this.value.trim();
                     if (query.length >= 2) {
@@ -636,7 +829,7 @@
                     }
                 });
 
-                searchInput.addEventListener('keydown', function(event) {
+                searchInput.addEventListener('keydown', function (event) {
                     if (event.key === 'Enter') {
                         event.preventDefault();
                         const query = this.value.trim();
@@ -680,7 +873,7 @@
             }
 
             // Close search on outside click
-            document.addEventListener('click', function(event) {
+            document.addEventListener('click', function (event) {
                 if (!searchInput.contains(event.target)) {
                     searchResults.classList.add('hidden');
                 }
@@ -690,7 +883,147 @@
             // Initial setup
             updateThemeButton();
         });
+
+        // Custom Modal System
+        function showCustomModal(title, message, confirmCallback, cancelCallback = null) {
+            const modal = document.getElementById('customModal');
+            const modalContent = document.getElementById('modalContent');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            const confirmBtn = document.getElementById('modalConfirm');
+            const cancelBtn = document.getElementById('modalCancel');
+
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+
+            // Show modal with animation
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            // Animate in
+            setTimeout(() => {
+                modal.classList.add('modal-show');
+                modalContent.classList.add('modal-content-show');
+            }, 10);
+
+            // Handle confirm
+            confirmBtn.onclick = function () {
+                hideCustomModal();
+                if (confirmCallback) confirmCallback();
+            };
+
+            // Handle cancel
+            cancelBtn.onclick = function () {
+                hideCustomModal();
+                if (cancelCallback) cancelCallback();
+            };
+
+            // Handle escape key
+            const escapeHandler = function (e) {
+                if (e.key === 'Escape') {
+                    hideCustomModal();
+                    if (cancelCallback) cancelCallback();
+                    document.removeEventListener('keydown', escapeHandler);
+                }
+            };
+            document.addEventListener('keydown', escapeHandler);
+        }
+
+        function hideCustomModal() {
+            const modal = document.getElementById('customModal');
+            const modalContent = document.getElementById('modalContent');
+
+            // Animate out
+            modal.classList.remove('modal-show');
+            modalContent.classList.remove('modal-content-show');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 200);
+        }
+
+        // Custom Alert
+        function customAlert(message, title = 'Alert') {
+            showCustomModal(title, message, function () {
+                // Just close the modal
+            });
+        }
+
+        // Custom Confirm  
+        function customConfirm(message, callback, title = 'Confirm') {
+            showCustomModal(title, message, function () {
+                callback(true);
+            }, function () {
+                callback(false);
+            });
+        }
     </script>
+
+    <!-- Custom Modal -->
+    <div id="customModal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-backdrop">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black transition-opacity duration-200" style="background-color: rgba(0, 0, 0, 0);">
+        </div>
+
+        <!-- Modal -->
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div id="modalContent"
+                class="relative transform overflow-hidden rounded-xl shadow-2xl transition-all duration-200 sm:my-8 sm:w-full sm:max-w-lg modal-content"
+                style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); transform: scale(0.9); opacity: 0;">
+
+                <!-- Header with icon -->
+                <div class="px-6 py-4 border-b flex items-center" style="border-color: var(--border-color);">
+                    <div class="flex-shrink-0 mr-3">
+                        <svg class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
+                    <h3 id="modalTitle" class="text-lg font-semibold" style="color: var(--text-primary);">
+                        Confirm Action
+                    </h3>
+                </div>
+
+                <!-- Body -->
+                <div class="px-6 py-6">
+                    <p id="modalMessage" style="color: var(--text-secondary); line-height: 1.6;">
+                        Are you sure you want to continue?
+                    </p>
+                </div>
+
+                <!-- Footer -->
+                <div class="px-6 py-4 border-t modal-footer-buttons flex justify-end space-x-3"
+                    style="border-color: var(--border-color); background-color: var(--bg-primary);">
+                    <button id="modalCancel" type="button"
+                        class="px-6 py-2.5 text-sm font-medium rounded-xl border transition-all duration-200 hover:shadow-md focus:ring-2 focus:ring-offset-2"
+                        style="background-color: var(--bg-secondary); color: var(--text-secondary); border-color: var(--border-color); focus:ring-color: var(--accent-color);">
+                        Cancel
+                    </button>
+                    <button id="modalConfirm" type="button"
+                        class="px-6 py-2.5 text-sm font-medium text-white rounded-xl transition-all duration-200 hover:shadow-md focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                        style="background-color: #dc2626;">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal-backdrop.modal-show .fixed {
+            background-color: rgba(0, 0, 0, 0.5) !important;
+        }
+
+        .modal-content-show {
+            transform: scale(1) !important;
+            opacity: 1 !important;
+        }
+
+        .modal-content {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+    </style>
 </body>
 
 </html>

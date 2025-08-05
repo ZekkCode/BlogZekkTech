@@ -3,6 +3,80 @@
 @section('title', isset($category) ? $category->name : 'Home')
 
 @section('content')
+<style>
+    /* Mobile responsive styling for blog posts */
+    @media (max-width: 768px) {
+        /* Excerpt/summary styling for mobile */
+        .post-excerpt {
+            font-size: 0.875rem !important; /* 14px */
+            line-height: 1.4 !important;
+            margin-bottom: 0.75rem !important;
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* Limit to 3 lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Article card padding adjustment */
+        .card {
+            padding: 1rem !important; /* Smaller padding on mobile */
+        }
+        
+        /* Title sizing for mobile */
+        .post-title {
+            font-size: 1.25rem !important; /* 20px instead of 24px */
+            line-height: 1.3 !important;
+            margin-bottom: 0.75rem !important;
+        }
+        
+        /* Button styling for mobile */
+        .btn-primary {
+            padding: 0.625rem 1rem !important;
+            font-size: 0.875rem !important;
+            border-radius: 0.75rem !important;
+        }
+        
+        /* Category tags mobile styling */
+        .category-tag {
+            font-size: 0.625rem !important; /* 10px */
+            padding: 0.25rem 0.5rem !important;
+        }
+        
+        /* Published date mobile styling */
+        .published-date {
+            font-size: 0.75rem !important; /* 12px */
+            margin-bottom: 0.5rem !important;
+        }
+        
+        /* Author info mobile styling */
+        .author-info {
+            font-size: 0.75rem !important; /* 12px */
+        }
+    }
+    
+    @media (max-width: 480px) {
+        /* Extra small mobile adjustments */
+        .post-excerpt {
+            font-size: 0.8125rem !important; /* 13px */
+            -webkit-line-clamp: 2; /* Only 2 lines on very small screens */
+        }
+        
+        .post-title {
+            font-size: 1.125rem !important; /* 18px */
+        }
+        
+        .card {
+            padding: 0.75rem !important;
+        }
+        
+        .btn-primary {
+            padding: 0.5rem 0.875rem !important;
+            font-size: 0.8125rem !important;
+        }
+    }
+</style>
+
 <!-- Hero Section with Featured Image -->
 <div class="hero-section relative w-full h-64 md:h-80 overflow-hidden rounded-lg mb-8 card z-10">
     <img src="{{ asset('storage/banner.png') }}" alt="ZekkTech - AI & Technology Hub"
@@ -49,7 +123,7 @@
                             <span class="category-tag">{{ $cat->name }}</span>
                             @endforeach
                         </div>
-                        <h2 class="text-xl md:text-2xl font-bold mb-3">
+                        <h2 class="post-title text-xl md:text-2xl font-bold mb-3">
                             <a href="{{ route('blog.show', $post->slug) }}"
                                 class="transition-colors"
                                 style="color: var(--text-primary);"
@@ -59,16 +133,16 @@
                             </a>
                         </h2>
                         @if($post->excerpt)
-                        <p class="text-base mb-4 leading-relaxed font-medium" style="color: var(--text-secondary);">
+                        <p class="post-excerpt text-base mb-4 leading-relaxed font-medium" style="color: var(--text-secondary);">
                             {{ $post->excerpt }}
                         </p>
                         @else
-                        <p class="text-base mb-4 leading-relaxed" style="color: var(--text-secondary);">
+                        <p class="post-excerpt text-base mb-4 leading-relaxed" style="color: var(--text-secondary);">
                             {{ Str::limit(strip_tags($post->body), 200) }}
                         </p>
                         @endif
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
-                            <div class="flex items-center gap-2">
+                            <div class="author-info flex items-center gap-2">
                                 @if($post->user->avatar)
                                 <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}"
                                     class="w-8 h-8 rounded-full object-cover border"
