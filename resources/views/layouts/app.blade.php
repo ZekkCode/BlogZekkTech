@@ -109,10 +109,21 @@
             transition: all 0.2s ease;
             border-radius: 0.75rem;
             /* 12px - rounded-xl */
+            padding: 0.5rem 1.25rem;
+            /* py-2 px-5 for better spacing */
+            min-height: 2.5rem;
+            /* Consistent button height */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            /* Space between text and icons */
         }
 
         .btn-primary:hover {
             opacity: 0.9;
+            transform: translateY(-1px);
+            /* Subtle lift effect */
         }
 
         .btn-secondary {
@@ -122,10 +133,21 @@
             transition: all 0.2s ease;
             border-radius: 0.75rem;
             /* 12px - rounded-xl */
+            padding: 0.5rem 1.25rem;
+            /* py-2 px-5 for better spacing */
+            min-height: 2.5rem;
+            /* Consistent button height */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            /* Space between text and icons */
         }
 
         .btn-secondary:hover {
             background-color: var(--bg-secondary);
+            transform: translateY(-1px);
+            /* Subtle lift effect */
         }
 
         /* Global button styling */

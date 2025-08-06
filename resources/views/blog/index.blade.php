@@ -170,7 +170,7 @@
                                             </span>
                                         </div>
                                         <a href="{{ route('blog.show', $post->slug) }}"
-                                            class="btn-primary text-sm font-medium inline-flex items-center justify-center gap-2 w-full sm:w-auto min-h-10">
+                                            class="btn-primary text-sm font-medium w-full sm:w-auto">
                                             Baca Selengkapnya
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

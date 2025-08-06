@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Kelola Post')
+@section('title', 'Manage Posts')
 
 @section('content')
     <style>
@@ -198,14 +198,14 @@
     <div class="max-w-6xl mx-auto">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <div>
-                <h1 class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary);">Manajemen Postingan</h1>
+                <h1 class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary);">Manage Posts</h1>
                 <a href="{{ asset('admin_guide.html') }}" target="_blank" class="text-sm transition-colors"
                     style="color: var(--accent-color);" onmouseover="this.style.textDecoration='underline'"
-                    onmouseout="this.style.textDecoration='none'">Lihat Panduan Admin</a>
+                    onmouseout="this.style.textDecoration='none'">View Admin Guide</a>
             </div>
             <a href="{{ route('admin.posts.create') }}"
                 class="btn-primary font-bold py-2 px-3 sm:px-4 rounded-xl text-sm sm:text-base w-full sm:w-auto text-center">
-                Buat Post Baru
+                Create New Post
             </a>
         </div>
 
@@ -219,9 +219,9 @@
             <table class="admin-table w-full text-left">
                 <thead>
                     <tr style="border-bottom: 1px solid var(--border-color);">
-                        <th class="px-6 py-3" style="color: var(--text-primary);">Judul & Kategori</th>
-                        <th class="px-6 py-3" style="color: var(--text-primary);">Terposting</th>
-                        <th class="px-6 py-3" style="color: var(--text-primary);">Aksi</th>
+                        <th class="px-6 py-3" style="color: var(--text-primary);">Title & Categories</th>
+                        <th class="px-6 py-3" style="color: var(--text-primary);">Published</th>
+                        <th class="px-6 py-3" style="color: var(--text-primary);">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -255,7 +255,7 @@
                                                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                             <div>
-                                                <div class="text-sm font-medium text-green-600">Terposting</div>
+                                                <div class="text-sm font-medium text-green-600">Published</div>
                                                 <div class="text-xs" style="color: var(--text-secondary);">
                                                     {{ $post->published_at->format('M d, Y') }}</div>
                                             </div>
@@ -271,7 +271,7 @@
                                             </svg>
                                             <div>
                                                 <div class="text-sm font-medium" style="color: var(--text-secondary);">Draft</div>
-                                                <div class="text-xs" style="color: var(--text-secondary);">Belum dipublikasikan</div>
+                                                <div class="text-xs" style="color: var(--text-secondary);">Not published</div>
                                             </div>
                                         </div>
                                     </div>
@@ -292,7 +292,7 @@
                                         </svg>
                                     </a>
                                     <a href="{{ route('admin.posts.edit', $post->id) }}"
-                                        class="text-amber-400 hover:text-amber-300" title="Edit Postingan">
+                                        class="text-amber-400 hover:text-amber-300" title="Edit Post">
                                         <span class="sr-only">Edit</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                             fill="currentColor">
@@ -301,12 +301,12 @@
                                         </svg>
                                     </a>
                                     <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST"
-                                        class="inline-block" id="deleteForm{{ $post->id }}">
+                                        class="inline-block">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="text-red-400 hover:text-red-300"
-                                            onclick="customConfirm('Apakah Anda yakin ingin menghapus postingan ini? Tindakan ini tidak dapat dibatalkan.', function(result) { if(result) document.getElementById('deleteForm{{ $post->id }}').submit(); })"
-                                            title="Hapus Postingan">
+                                        <button type="submit" class="text-red-400 hover:text-red-300"
+                                            onclick="return confirm('Are you sure you want to delete this post?')"
+                                            title="Delete Post">
                                             <span class="sr-only">Delete</span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                                 fill="currentColor">
@@ -324,8 +324,8 @@
                     @if($posts->count() == 0)
                         <tr>
                             <td colspan="3" class="px-6 py-8 text-center" style="color: var(--text-secondary);">
-                                Tidak ada post ditemukan. <a href="{{ route('admin.posts.create') }}"
-                                    style="color: var(--accent-color);">Buat post pertama Anda</a>.
+                                No posts found. <a href="{{ route('admin.posts.create') }}"
+                                    style="color: var(--accent-color);">Create your first post</a>.
                             </td>
                         </tr>
                     @endif
