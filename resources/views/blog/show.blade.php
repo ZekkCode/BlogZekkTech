@@ -490,6 +490,225 @@
             font-size: 0.8rem;
             color: var(--text-secondary);
         }
+
+        /* Desktop - show all categories */
+        @media (min-width: 769px) {
+            .hidden-mobile {
+                display: inline-block !important;
+            }
+
+            .categories-overflow {
+                display: none !important;
+            }
+        }
+
+        /* Mobile Layout Improvements - Natural & Clean untuk Handphone */
+        @media (max-width: 768px) {
+
+            /* Container mobile - padding natural */
+            .max-w-7xl {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+                max-width: 100% !important;
+            }
+
+            /* Grid mobile - spacing natural */
+            .grid {
+                gap: 1rem !important;
+            }
+
+            /* Main content mobile - hapus card styling, natural flow */
+            .main-content {
+                min-height: auto;
+                padding: 0;
+                background: transparent;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            /* Post header mobile - spacing yang natural */
+            .mb-6 {
+                margin-bottom: 1rem !important;
+            }
+
+            .sm\\:mb-8 {
+                margin-bottom: 1rem !important;
+            }
+
+            /* Title mobile - typography natural, lebih kecil */
+            h1.mb-4 {
+                margin-bottom: 0.75rem !important;
+                font-size: 1.5rem !important;
+                line-height: 1.3 !important;
+                font-weight: 700 !important;
+                color: var(--text-primary);
+            }
+
+            /* Categories mobile - layout natural, lebih kecil */
+            .flex-wrap {
+                gap: 0.375rem !important;
+                margin-bottom: 0.75rem;
+            }
+
+            /* Category tags mobile - compact design */
+            .inline-block {
+                font-size: 0.75rem !important;
+                padding: 0.25rem 0.5rem !important;
+                min-height: auto !important;
+            }
+
+            /* Hide extra categories on mobile */
+            .hidden-mobile {
+                display: none !important;
+            }
+
+            /* Show categories overflow indicator */
+            .categories-overflow {
+                display: inline-block !important;
+                font-size: 0.75rem !important;
+                color: var(--text-secondary) !important;
+                background: var(--bg-secondary) !important;
+                padding: 0.25rem 0.5rem !important;
+                border-radius: 9999px !important;
+            }
+
+            /* Author info mobile - natural styling, lebih kecil */
+            .text-sm {
+                font-size: 0.8rem !important;
+                line-height: 1.4;
+                color: var(--text-secondary);
+            }
+
+            /* Sidebar mobile - natural background, lebih kompak */
+            .lg\\:w-1\\/3>div {
+                background: var(--bg-secondary);
+                border-radius: 0.5rem;
+                padding: 0.75rem !important;
+            }
+
+            /* Post content mobile - natural reading experience, lebih kecil */
+            .post-content {
+                padding: 0 !important;
+                font-size: 0.95rem !important;
+                line-height: 1.6 !important;
+                background: transparent;
+            }
+
+            /* Fix untuk gambar di konten markdown */
+            .post-content img {
+                width: 100% !important;
+                height: auto !important;
+                border-radius: 0.5rem !important;
+                margin: 1rem 0 !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+            }
+
+            /* Fix untuk code blocks di mobile */
+            .post-content pre {
+                overflow-x: auto !important;
+                font-size: 0.85rem !important;
+                padding: 0.75rem !important;
+                border-radius: 0.375rem !important;
+            }
+
+            .post-content code {
+                font-size: 0.85rem !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            /* Extra small mobile - natural compact layout */
+            .max-w-7xl {
+                padding-left: 0.625rem !important;
+                padding-right: 0.625rem !important;
+            }
+
+            /* Main content - natural flow */
+            .main-content {
+                padding: 0 !important;
+            }
+
+            /* Header info mobile - natural inline layout, lebih kecil */
+            .flex-wrap:first-of-type {
+                flex-direction: row;
+                align-items: center !important;
+                gap: 0.375rem !important;
+                flex-wrap: wrap;
+                padding: 0;
+                background: transparent;
+                border-radius: 0;
+                margin-bottom: 0.75rem;
+            }
+
+            /* Separator untuk mobile */
+            .flex-wrap:first-of-type span.mx-2 {
+                display: inline !important;
+            }
+
+            /* Categories mobile - natural chips, lebih kecil */
+            .flex-wrap:last-child {
+                flex-direction: row;
+                align-items: center !important;
+                margin-top: 0.5rem;
+                flex-wrap: wrap;
+            }
+
+            /* Extra small mobile - category tags super compact */
+            .inline-block {
+                font-size: 0.7rem !important;
+                padding: 0.2rem 0.4rem !important;
+                border-radius: 0.375rem !important;
+            }
+
+            /* Limit to max 3 categories on small screens */
+            .flex-wrap>a:nth-child(n+3) {
+                display: none !important;
+            }
+
+            /* Categories overflow indicator */
+            .categories-container {
+                position: relative;
+            }
+
+            /* Show indicator for hidden categories */
+            .categories-overflow {
+                font-size: 0.7rem !important;
+                color: var(--text-secondary) !important;
+                background: var(--bg-secondary) !important;
+                padding: 0.2rem 0.4rem !important;
+                border-radius: 0.375rem !important;
+                margin-left: 0.25rem;
+            }
+
+            /* Title mobile - natural sizing, lebih kecil */
+            h1 {
+                font-size: 1.25rem !important;
+                line-height: 1.3 !important;
+                margin-bottom: 0.75rem !important;
+                font-weight: 700 !important;
+            }
+
+            /* Post content mobile - natural reading, lebih kecil */
+            .post-content {
+                padding: 0 !important;
+                font-size: 0.9rem !important;
+                line-height: 1.5 !important;
+                margin-top: 1rem !important;
+            }
+
+            /* Sidebar mobile - natural cards, lebih kompak */
+            .lg\\:w-1\\/3>div {
+                padding: 0.625rem !important;
+                margin-bottom: 0.75rem;
+                border-radius: 0.5rem;
+            }
+
+            /* Author info text lebih kecil */
+            .text-sm {
+                font-size: 0.75rem !important;
+            }
+        }
     </style>
 
     <!-- Main Layout -->
@@ -509,10 +728,31 @@
                     </div>
                     <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 leading-tight"
                         style="color: var(--text-primary);">{{ $post->title }}</h1>
-                    <div class="flex flex-wrap items-center gap-2">
-                        @foreach($post->categories as $category)
+                    <div class="flex flex-wrap items-center gap-2 categories-container">
+                        @php
+                            $totalCategories = $post->categories->count();
+                            $maxCategoriesDisplay = 3; // Max categories to show on mobile
+                        @endphp
+
+                        @foreach($post->categories->take($maxCategoriesDisplay) as $category)
                             <a href="{{ route('blog.category', $category->slug) }}"
                                 class="inline-block px-3 py-1 text-sm rounded-full min-h-8 transition-colors hover:shadow-md"
+                                style="background-color: var(--accent-color); color: white;"
+                                onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                                {{ $category->name }}
+                            </a>
+                        @endforeach
+
+                        @if($totalCategories > $maxCategoriesDisplay)
+                            <span class="categories-overflow hidden-mobile">
+                                +{{ $totalCategories - $maxCategoriesDisplay }} lagi
+                            </span>
+                        @endif
+
+                        <!-- Show all categories on desktop -->
+                        @foreach($post->categories->skip($maxCategoriesDisplay) as $category)
+                            <a href="{{ route('blog.category', $category->slug) }}"
+                                class="inline-block px-3 py-1 text-sm rounded-full min-h-8 transition-colors hover:shadow-md hidden-mobile"
                                 style="background-color: var(--accent-color); color: white;"
                                 onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
                                 {{ $category->name }}
@@ -551,12 +791,16 @@
                             @endif
                             <div>
                                 <h3 class="text-lg sm:text-xl font-semibold" style="color: var(--text-primary);">
-                                    {{ $post->user->name }}</h3>
+                                    {{ $post->user->name }}
+                                </h3>
                                 <p class="text-sm" style="color: var(--text-secondary);">Penulis</p>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Comments Section -->
+                @include('components.comments', ['post' => $post])
 
                 <!-- Navigation -->
                 <div class="mt-12 pt-8" style="border-top: 1px solid var(--border-color);">
@@ -602,14 +846,24 @@
                     <h3>Postingan Terkait</h3>
                     <div class="space-y-1">
                         @php
+                            // Cari post dengan kategori yang sama terlebih dahulu
                             $relatedPosts = \App\Models\Post::where('id', '!=', $post->id)
                                 ->whereHas('categories', function ($query) use ($post) {
                                     $query->whereIn('categories.id', $post->categories->pluck('id'));
                                 })
-                                ->orWhere('id', '!=', $post->id)
-                                ->inRandomOrder()
+                                ->orderBy('published_at', 'desc')
                                 ->take(5)
                                 ->get();
+
+                            // Jika tidak cukup, tambahkan post random lainnya
+                            if ($relatedPosts->count() < 5) {
+                                $additionalPosts = \App\Models\Post::where('id', '!=', $post->id)
+                                    ->whereNotIn('id', $relatedPosts->pluck('id'))
+                                    ->inRandomOrder()
+                                    ->take(5 - $relatedPosts->count())
+                                    ->get();
+                                $relatedPosts = $relatedPosts->merge($additionalPosts);
+                            }
                         @endphp
 
                         @if($relatedPosts->count() > 0)
@@ -626,7 +880,7 @@
                                                     style="color: var(--text-secondary);" fill="none" viewBox="0 0 24 24"
                                                     stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                 </svg>
                                             </div>
                                         @endif
@@ -639,6 +893,9 @@
                                         </h4>
                                         <div class="related-post-meta">
                                             {{ $relatedPost->published_at->format('M d, Y') }}
+                                            @if($relatedPost->categories->intersect($post->categories)->count() > 0)
+                                                <span style="color: var(--accent-color); font-size: 0.7rem;">● Same Category</span>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -652,46 +909,54 @@
                 </div>
 
                 <!-- Latest Posts Widget -->
+                <!-- Latest Posts Widget -->
                 <div class="sidebar-widget">
                     <h3>Latest Posts</h3>
                     <div class="space-y-1">
                         @php
                             $latestPosts = \App\Models\Post::where('id', '!=', $post->id)
+                                ->whereNotNull('published_at')
                                 ->orderBy('published_at', 'desc')
                                 ->take(5)
                                 ->get();
                         @endphp
 
-                        @foreach($latestPosts as $latestPost)
-                            <div class="related-post-item">
-                                <div class="related-post-image">
-                                    @if($latestPost->image)
-                                        <img src="{{ asset('storage/' . $latestPost->image) }}" alt="{{ $latestPost->title }}"
-                                            class="w-full h-full object-cover rounded-lg">
-                                    @else
-                                        <div class="w-full h-full flex items-center justify-center rounded-lg"
-                                            style="background-color: var(--border-color);">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8"
-                                                style="color: var(--text-secondary);" fill="none" viewBox="0 0 24 24"
-                                                stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
+                        @if($latestPosts->count() > 0)
+                            @foreach($latestPosts as $latestPost)
+                                <div class="related-post-item">
+                                    <div class="related-post-image">
+                                        @if($latestPost->image)
+                                            <img src="{{ asset('storage/' . $latestPost->image) }}" alt="{{ $latestPost->title }}"
+                                                class="w-full h-full object-cover rounded-lg">
+                                        @else
+                                            <div class="w-full h-full flex items-center justify-center rounded-lg"
+                                                style="background-color: var(--border-color);">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8"
+                                                    style="color: var(--text-secondary);" fill="none" viewBox="0 0 24 24"
+                                                    stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="related-post-content flex-1">
+                                        <h4>
+                                            <a href="{{ route('blog.show', $latestPost->slug) }}">
+                                                {{ Str::limit($latestPost->title, 60) }}
+                                            </a>
+                                        </h4>
+                                        <div class="related-post-meta">
+                                            {{ $latestPost->published_at->format('M d, Y') }}
                                         </div>
-                                    @endif
-                                </div>
-                                <div class="related-post-content flex-1">
-                                    <h4>
-                                        <a href="{{ route('blog.show', $latestPost->slug) }}">
-                                            {{ Str::limit($latestPost->title, 60) }}
-                                        </a>
-                                    </h4>
-                                    <div class="related-post-meta">
-                                        {{ $latestPost->published_at->format('M d, Y') }}
                                     </div>
                                 </div>
+                            @endforeach
+                        @else
+                            <div class="text-center py-4" style="color: var(--text-secondary);">
+                                <p>Tidak ada postingan terbaru ditemukan</p>
                             </div>
-                        @endforeach
+                        @endif
                     </div>
                 </div>
 

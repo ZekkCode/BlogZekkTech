@@ -63,4 +63,28 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
+
+    /**
+     * Get all comments for the user
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Get all comment likes for the user
+     */
+    public function commentLikes(): HasMany
+    {
+        return $this->hasMany(CommentLike::class);
+    }
+
+    /**
+     * Check if user is verified (can be extended later)
+     */
+    public function getIsVerifiedAttribute(): bool
+    {
+        return $this->is_admin || false; // For now, only admins are verified
+    }
 }

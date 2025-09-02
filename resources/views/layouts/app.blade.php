@@ -20,6 +20,22 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <!-- Global JavaScript Variables -->
+    <script>
+        window.isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+        @auth
+            window.currentUserId = {{ auth()->id() }};
+            window.isAdmin = {{ auth()->user()->is_admin ? 'true' : 'false' }};
+        @else
+            window.currentUserId = null;
+            window.isAdmin = false;
+        @endauth
+
+        @if(isset($post))
+            window.postId = {{ $post->id }};
+        @endif
+    </script>
+
     <style>
         /* Light theme (default) */
         :root {
@@ -65,15 +81,63 @@
             color: var(--text-primary);
             transition: background-color 0.3s ease, color 0.3s ease;
             font-family: 'Inter', sans-serif;
+            user-select: none;
+            /* Prevent text selection by default */
+            -webkit-user-select: none;
+            /* Safari */
+            -moz-user-select: none;
+            /* Firefox */
+            -ms-user-select: none;
+            /* IE10+ */
         }
 
-        /* Allow selection for specific elements */
-        .prose,
-        .post-content,
+        /* Allow selection only for specific elements where needed */
         input,
         textarea,
-        [contenteditable="true"] {
-            user-select: text;
+        [contenteditable="true"],
+        .selectable-text,
+        #themeToggle,
+        #themeToggleMobile {
+            user-select: text !important;
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+        }
+
+        /* Special styling for theme toggle to allow text selection */
+        #themeToggle,
+        #themeToggleMobile {
+            cursor: text !important;
+            pointer-events: auto !important;
+        }
+
+        /* When hovering over theme toggle, show text cursor */
+        #themeToggle:hover,
+        #themeToggleMobile:hover {
+            cursor: text !important;
+        }
+
+        /* Prevent context menu on right click for images and other elements */
+        img,
+        svg,
+        .logo-img,
+        .action-btn {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            pointer-events: none;
+        }
+
+        /* Re-enable pointer events for interactive elements */
+        button,
+        a,
+        input,
+        textarea,
+        select,
+        .clickable {
+            pointer-events: auto;
         }
 
         /* ===== HEADER STYLES ===== */

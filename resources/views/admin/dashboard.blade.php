@@ -31,39 +31,39 @@
 @section('content')
     <div class="max-w-7xl mx-auto">
         <div class="card rounded-xl p-6 mb-8">
-            <h2 class="text-2xl font-bold mb-4" style="color: var(--text-primary);">Welcome to Admin Dashboard</h2>
-            <p class="mb-4" style="color: var(--text-secondary);">You can manage your blog content from here.</p>
+            <h2 class="text-2xl font-bold mb-4" style="color: var(--text-primary);">Selamat Datang di Dashboard Admin</h2>
+            <p class="mb-4" style="color: var(--text-secondary);">Mengelola Post Disini.</p>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
                 <div class="card rounded-xl p-6">
-                    <h3 class="text-xl font-bold mb-2" style="color: var(--text-primary);">Posts</h3>
-                    <p class="mb-4" style="color: var(--text-secondary);">Manage your blog posts</p>
+                    <h3 class="text-xl font-bold mb-2" style="color: var(--text-primary);">Postingan</h3>
+                    <p class="mb-4" style="color: var(--text-secondary);">Mengelola Postingan</p>
                     <a href="{{ route('admin.posts.index') }}" class="btn-primary">
-                        View Posts
+                        Lihat Postingan
                     </a>
                 </div>
 
                 <div class="card rounded-xl p-6">
-                    <h3 class="text-xl font-bold mb-2" style="color: var(--text-primary);">Categories</h3>
-                    <p class="mb-4" style="color: var(--text-secondary);">Manage post categories</p>
+                    <h3 class="text-xl font-bold mb-2" style="color: var(--text-primary);">Kategori</h3>
+                    <p class="mb-4" style="color: var(--text-secondary);">Mengelola Kategori Postingan</p>
                     <a href="{{ route('admin.categories.index') }}" class="btn-primary">
-                        View Categories
+                        Lihat Kategori
                     </a>
                 </div>
 
                 <div class="card rounded-xl p-6">
                     <h3 class="text-xl font-bold mb-2" style="color: var(--text-primary);">Website</h3>
-                    <p class="mb-4" style="color: var(--text-secondary);">Go to your blog</p>
+                    <p class="mb-4" style="color: var(--text-secondary);">Kunjungi blog Anda</p>
                     <a href="{{ route('home') }}" class="btn-primary">
-                        Visit Website
+                        Kunjungi Website
                     </a>
                 </div>
 
                 <div class="card rounded-xl p-6">
-                    <h3 class="text-xl font-bold mb-2" style="color: var(--text-primary);">Help & Guide</h3>
-                    <p class="mb-4" style="color: var(--text-secondary);">Learn how to use admin panel</p>
+                    <h3 class="text-xl font-bold mb-2" style="color: var(--text-primary);">Bantuan & Panduan</h3>
+                    <p class="mb-4" style="color: var(--text-secondary);">Pelajari cara menggunakan panel admin</p>
                     <a href="{{ asset('admin_guide.html') }}" target="_blank" class="btn-primary">
-                        View Guide
+                        Lihat Panduan
                     </a>
                 </div>
             </div>
@@ -74,15 +74,15 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="card rounded-xl p-6 text-center">
                     <div class="text-3xl font-bold mb-2" style="color: var(--accent-color);">{{ $stats['posts'] }}</div>
-                    <div style="color: var(--text-secondary);">Total Posts</div>
+                    <div style="color: var(--text-secondary);">Total Postingan</div>
                 </div>
                 <div class="card rounded-xl p-6 text-center">
                     <div class="text-3xl font-bold mb-2" style="color: var(--accent-color);">{{ $stats['categories'] }}</div>
-                    <div style="color: var(--text-secondary);">Categories</div>
+                    <div style="color: var(--text-secondary);">Kategori</div>
                 </div>
                 <div class="card rounded-xl p-6 text-center">
                     <div class="text-3xl font-bold mb-2" style="color: var(--accent-color);">{{ $stats['users'] }}</div>
-                    <div style="color: var(--text-secondary);">Users</div>
+                    <div style="color: var(--text-secondary);">Pengguna</div>
                 </div>
             </div>
         @endif
@@ -90,7 +90,7 @@
         <!-- Recent Posts -->
         @if(isset($latestPosts) && $latestPosts->count() > 0)
             <div class="card rounded-xl p-6">
-                <h3 class="text-xl font-bold mb-4" style="color: var(--text-primary);">Recent Posts</h3>
+                <h3 class="text-xl font-bold mb-4" style="color: var(--text-primary);">Postingan Terbaru</h3>
                 <div class="space-y-4">
                     @foreach($latestPosts as $post)
                         <div class="flex items-center gap-4 p-4 rounded-lg" style="background-color: var(--bg-secondary);">
@@ -115,7 +115,7 @@
 
         <!-- Logo Preview -->
         <div class="card rounded-xl p-6">
-            <h3 class="text-xl font-bold mb-4" style="color: var(--text-primary);">Logo Preview</h3>
+            <h3 class="text-xl font-bold mb-4" style="color: var(--text-primary);">Logo Website</h3>
             <div class="flex justify-center">
                 <img src="{{ asset('images/zekktech-logo-fixed.svg') }}" alt="BlogZekkTech Logo" class="h-24">
             </div>

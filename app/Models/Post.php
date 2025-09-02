@@ -40,4 +40,32 @@ class Post extends Model
     {
         return $this->categories->first();
     }
+
+    /**
+     * Get all comments for the post
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Get approved parent comments for the post
+     */
+    public function approvedComments()
+    {
+        return $this->hasMany(Comment::class)
+                    ->where('is_approved', true)
+                    ->whereNull('parent_id')
+                    ->with(['user', 'replies.user'])
+                    ->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Get total comments count (including replies)
+     */
+    public function getCommentsCountAttribute(): int
+    {
+        return $this->comments()->where('is_approved', true)->count();
+    }
 }

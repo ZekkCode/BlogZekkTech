@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ThemeController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,17 @@ Route::get('/api/search', [SearchController::class, 'api'])->name('search.api');
 // Theme routes
 Route::post('/theme/toggle', [ThemeController::class, 'toggle'])->name('theme.toggle');
 Route::post('/theme/set', [ThemeController::class, 'setTheme'])->name('theme.set');
+
+// Comment routes (API)
+Route::prefix('api/comments')->name('comments.')->group(function () {
+    Route::get('/post/{post}', [CommentController::class, 'index'])->name('index');
+    
+    Route::middleware('auth')->group(function () {
+        Route::post('/post/{post}', [CommentController::class, 'store'])->name('store');
+        Route::post('/{comment}/like', [CommentController::class, 'toggleLike'])->name('like');
+        Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('destroy');
+    });
+});
 
 // Admin Auth Routes
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
