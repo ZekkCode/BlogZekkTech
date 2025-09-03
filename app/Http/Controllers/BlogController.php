@@ -31,7 +31,16 @@ class BlogController extends Controller
     public function show(string $slug): View
     {
         $post = Post::where('slug', $slug)
-            ->with(['user', 'categories'])
+            ->with([
+                'user', 
+                'categories',
+                'comments' => function($query) {
+                    $query->with(['user', 'replies.user'])
+                          ->whereNull('parent_id')
+                          ->orderBy('created_at', 'desc');
+                }
+            ])
+            ->withCount('comments')
             ->firstOrFail();
 
         return view('blog.show', compact('post'));

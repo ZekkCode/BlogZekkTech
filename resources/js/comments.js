@@ -11,50 +11,59 @@ class CommentsSystem {
         this.isLoading = false;
         this.isAuthenticated = window.isAuthenticated || false;
         
+        console.log(`Comments system initialized: postId=${postId}, authenticated=${this.isAuthenticated}`);
+        
         this.init();
     }
 
     init() {
         this.bindEvents();
-        this.loadComments();
-        this.setupEditor();
+        this.loadComments(); // Load comments regardless of auth status
+        
+        // Only setup editor if user is authenticated
+        if (this.isAuthenticated) {
+            this.setupEditor();
+        }
     }
 
     bindEvents() {
-        // Form submission
-        const form = document.getElementById('comment-form');
-        if (form) {
-            form.addEventListener('submit', (e) => this.handleSubmit(e));
-        }
-
-        // Sort change
+        // Sort change - available for all users
         const sortSelect = document.getElementById('comments-sort');
         if (sortSelect) {
             sortSelect.addEventListener('change', (e) => this.handleSortChange(e));
         }
 
-        // Editor events
-        const editor = document.getElementById('comment-editor');
-        if (editor) {
-            editor.addEventListener('input', () => this.updateCharacterCount());
-            editor.addEventListener('paste', (e) => this.handlePaste(e));
-        }
-
-        // Toolbar buttons
-        document.querySelectorAll('.toolbar-btn[data-command]').forEach(btn => {
-            btn.addEventListener('click', (e) => this.handleToolbarCommand(e));
-        });
-
-        // Cancel reply
-        const cancelReplyBtn = document.getElementById('cancel-reply');
-        if (cancelReplyBtn) {
-            cancelReplyBtn.addEventListener('click', () => this.cancelReply());
-        }
-
-        // Load more button
+        // Load more button - available for all users
         const loadMoreBtn = document.getElementById('load-more-btn');
         if (loadMoreBtn) {
             loadMoreBtn.addEventListener('click', () => this.loadMoreComments());
+        }
+
+        // Events only for authenticated users
+        if (this.isAuthenticated) {
+            // Form submission
+            const form = document.getElementById('comment-form');
+            if (form) {
+                form.addEventListener('submit', (e) => this.handleSubmit(e));
+            }
+
+            // Editor events
+            const editor = document.getElementById('comment-editor');
+            if (editor) {
+                editor.addEventListener('input', () => this.updateCharacterCount());
+                editor.addEventListener('paste', (e) => this.handlePaste(e));
+            }
+
+            // Toolbar buttons
+            document.querySelectorAll('.toolbar-btn[data-command]').forEach(btn => {
+                btn.addEventListener('click', (e) => this.handleToolbarCommand(e));
+            });
+
+            // Cancel reply
+            const cancelReplyBtn = document.getElementById('cancel-reply');
+            if (cancelReplyBtn) {
+                cancelReplyBtn.addEventListener('click', () => this.cancelReply());
+            }
         }
 
         // Click outside to close menus
@@ -109,8 +118,11 @@ class CommentsSystem {
         }
 
         try {
-            const response = await fetch(`/api/comments/post/${this.postId}?sort=${this.currentSort}&page=${this.currentPage}`);
+            console.log(`Loading comments for post ${this.postId}`);
+            const response = await fetch(`/posts/${this.postId}/comments?sort=${this.currentSort}&page=${this.currentPage}`);
             const data = await response.json();
+
+            console.log('Comments response:', data);
 
             if (data.success) {
                 if (reset) {
@@ -311,7 +323,7 @@ class CommentsSystem {
                 formData.append('parent_id', parentId);
             }
 
-            const response = await fetch(`/api/comments/post/${this.postId}`, {
+            const response = await fetch(`/posts/${this.postId}/comments`, {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -351,7 +363,7 @@ class CommentsSystem {
         }
 
         try {
-            const response = await fetch(`/api/comments/${commentId}/like`, {
+            const response = await fetch(`/comments/${commentId}/like`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -379,7 +391,7 @@ class CommentsSystem {
         }
 
         try {
-            const response = await fetch(`/api/comments/${commentId}`, {
+            const response = await fetch(`/comments/${commentId}`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -631,7 +643,39 @@ class CommentsSystem {
     }
 
     showLoginPrompt() {
-        this.showNotification('Please login to interact with comments', 'info');
+        // Create login prompt modal
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modal.innerHTML = `
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4 shadow-xl">
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Masuk Diperlukan</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">Silakan masuk untuk berkomentar, menyukai, atau berinteraksi dengan postingan.</p>
+                    <div class="flex space-x-3">
+                        <button onclick="this.closest('.fixed').remove()" class="flex-1 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium">
+                            Batal
+                        </button>
+                        <button onclick="window.location.href='/admin/login'" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg">
+                            Masuk
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Remove modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
     }
 
     hashCode(str) {

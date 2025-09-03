@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Auth\AdminAuthController;
+use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SearchController;
@@ -23,16 +24,26 @@ Route::get('/api/search', [SearchController::class, 'api'])->name('search.api');
 Route::post('/theme/toggle', [ThemeController::class, 'toggle'])->name('theme.toggle');
 Route::post('/theme/set', [ThemeController::class, 'setTheme'])->name('theme.set');
 
-// Comment routes (API)
-Route::prefix('api/comments')->name('comments.')->group(function () {
-    Route::get('/post/{post}', [CommentController::class, 'index'])->name('index');
-    
-    Route::middleware('auth')->group(function () {
-        Route::post('/post/{post}', [CommentController::class, 'store'])->name('store');
-        Route::post('/{comment}/like', [CommentController::class, 'toggleLike'])->name('like');
-        Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('destroy');
-    });
+// Comment API Routes - Protected with auth middleware
+Route::middleware('auth')->group(function () {
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::patch('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    Route::post('/comments/{comment}/like', [CommentController::class, 'toggleLike'])->name('comments.like');
 });
+
+// Comment viewing routes - No auth required
+Route::get('/posts/{post}/comments', [CommentController::class, 'index'])->name('comments.index');
+
+// Login Options - Main login page
+Route::get('/login', [UserAuthController::class, 'showLoginOptions'])->name('login');
+
+// User Auth Routes
+Route::get('/user/login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
+Route::post('/user/login', [UserAuthController::class, 'login'])->name('user.login.submit');
+Route::get('/user/register', [UserAuthController::class, 'showRegisterForm'])->name('user.register');
+Route::post('/user/register', [UserAuthController::class, 'register'])->name('user.register.submit');
+Route::post('/user/logout', [UserAuthController::class, 'logout'])->name('user.logout');
 
 // Admin Auth Routes
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');

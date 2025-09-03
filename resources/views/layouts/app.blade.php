@@ -579,11 +579,22 @@
                 </a>
                 <div class="nav-links-desktop">
                     <a href="{{ route('home') }}" class="nav-link">Beranda</a>
-                    @if(Auth::check() && Auth::user()->is_admin)
-                        <a href="{{ route('admin.dashboard') }}" class="nav-link">Admin</a>
+
+                    @if(Auth::check())
+                        @if(Auth::user()->is_admin)
+                            <a href="{{ route('admin.dashboard') }}" class="nav-link">Admin</a>
+                        @endif
+                        <span class="nav-link">Hai, {{ Auth::user()->name }}!</span>
+                        <form method="POST"
+                            action="{{ Auth::user()->is_admin ? route('admin.logout') : route('user.logout') }}"
+                            class="inline">
+                            @csrf
+                            <button type="submit" class="nav-link bg-transparent border-none cursor-pointer">Keluar</button>
+                        </form>
                     @else
-                        <a href="{{ route('admin.login') }}" class="nav-link">Masuk</a>
+                        <a href="{{ route('login') }}" class="nav-link">Masuk</a>
                     @endif
+
                     <a href="#footer" class="nav-link"
                         onclick="document.querySelector('footer').scrollIntoView({behavior: 'smooth'})">Tentang</a>
                     <a href="https://github.com/zekkcode" target="_blank" class="nav-link flex items-center gap-1">
@@ -643,12 +654,22 @@
                     <span>Beranda</span>
                     <span class="mobile-nav-link-arrow">&gt;</span>
                 </a>
-                @if(Auth::check() && Auth::user()->is_admin)
-                    <a href="{{ route('admin.dashboard') }}" class="mobile-nav-link">
-                        <span>Admin</span>
-                        <span class="mobile-nav-link-arrow">&gt;</span>
-                    </a>
-                    <form method="POST" action="{{ route('admin.logout') }}" class="block">
+
+                @if(Auth::check())
+                    @if(Auth::user()->is_admin)
+                        <a href="{{ route('admin.dashboard') }}" class="mobile-nav-link">
+                            <span>Admin</span>
+                            <span class="mobile-nav-link-arrow">&gt;</span>
+                        </a>
+                    @endif
+
+                    <div class="mobile-nav-link" style="cursor: default;">
+                        <span>{{ Auth::user()->name }}</span>
+                        <span class="mobile-nav-link-arrow">👋</span>
+                    </div>
+
+                    <form method="POST" action="{{ Auth::user()->is_admin ? route('admin.logout') : route('user.logout') }}"
+                        class="block">
                         @csrf
                         <button type="submit" class="mobile-nav-link w-full text-left">
                             <span>Keluar</span>
@@ -656,11 +677,12 @@
                         </button>
                     </form>
                 @else
-                    <a href="{{ route('admin.login') }}" class="mobile-nav-link">
+                    <a href="{{ route('login') }}" class="mobile-nav-link">
                         <span>Masuk</span>
                         <span class="mobile-nav-link-arrow">&gt;</span>
                     </a>
                 @endif
+
                 <a href="#about" class="mobile-nav-link">
                     <span>Tentang Website</span>
                     <span class="mobile-nav-link-arrow">&gt;</span>

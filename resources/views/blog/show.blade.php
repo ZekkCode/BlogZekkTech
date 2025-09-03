@@ -800,7 +800,7 @@
                 </div>
 
                 <!-- Comments Section -->
-                @include('components.comments', ['post' => $post])
+                @include('components.comments-new', ['post' => $post])
 
                 <!-- Navigation -->
                 <div class="mt-12 pt-8" style="border-top: 1px solid var(--border-color);">
@@ -962,5 +962,8 @@
 
             </div>
         </div>
+
+        <!-- Comments Section -->
+        @include('components.comments-new', ['post' => $post])
     </div>
 @endsection
