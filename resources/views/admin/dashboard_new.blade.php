@@ -105,7 +105,7 @@
         <div class="card rounded-xl p-6">
             <h3 class="text-xl font-bold mb-4" style="color: var(--text-primary);">Lihat Logo</h3>
             <div class="flex justify-center">
-                <img src="{{ asset('images/zekktech-logo-fixed.svg') }}" alt="BlogZekkTech Logo" class="h-24">
+                <img src="{{ asset(config('app.logo')) }}" alt="{{ config('app.name', 'BlogZekkTech') }} Logo" class="h-24">
             </div>
         </div>
     </div>

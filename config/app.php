@@ -15,6 +15,17 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    // Custom: Site branding assets
+    // Relative to public/ folder. Example values: 'images/zekktech-logo-fixed.svg' or 'images/logo.png'
+    'logo' => env('APP_LOGO', 'images/zekktech-logo-fixed.svg'),
+    // Favicon path (ico, png, or svg). Defaults to public/favicon.ico
+    'favicon' => env('APP_FAVICON', 'images/zekk-favicon.svg'),
+
+    // Default Open Graph / Twitter Card metadata
+    // Use paths relative to public/ for images
+    'og_image' => env('APP_OG_IMAGE', 'images/og-default.jpg'),
+    'og_description' => env('APP_OG_DESCRIPTION', 'Artikel teknologi, tutorial, dan insight terbaru di ZekkTech'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

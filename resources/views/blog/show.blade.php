@@ -2,6 +2,31 @@
 
 @section('title', $post->title)
 
+@section('meta')
+    @php
+        $fallbackDesc = config('app.og_description');
+        $desc = str($post->excerpt ?? strip_tags($post->content) ?? $fallbackDesc)->limit(160, '...');
+        $url = route('blog.show', $post->slug ?? $post->id);
+        $imagePath = $post->image ? 'storage/' . $post->image : 'storage/banner.jpg';
+        $imageFile = public_path($imagePath);
+        $image = asset($imagePath) . '?v=' . (file_exists($imageFile) ? @filemtime($imageFile) : '1');
+    @endphp
+    <meta name="description" content="{{ $desc }}" />
+    <link rel="canonical" href="{{ $url }}" />
+    <!-- Open Graph -->
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="{{ config('app.name', 'ZekkTech') }}" />
+    <meta property="og:title" content="{{ $post->title }}" />
+    <meta property="og:description" content="{{ $desc }}" />
+    <meta property="og:url" content="{{ $url }}" />
+    <meta property="og:image" content="{{ $image }}" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ $post->title }}" />
+    <meta name="twitter:description" content="{{ $desc }}" />
+    <meta name="twitter:image" content="{{ $image }}" />
+@endsection
+
 @section('content')
     <!-- Import Poppins Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">

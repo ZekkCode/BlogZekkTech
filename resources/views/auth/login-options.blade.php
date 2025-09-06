@@ -7,9 +7,11 @@
         <!-- Header Section -->
         <div class="text-center mb-12">
             <div class="flex justify-center items-center mb-6">
-                <img src="{{ asset('images/zekktech-logo-fixed.svg') }}" alt="ZekkTech Logo" class="h-20 w-20 mr-3">
+                <img src="{{ asset(config('app.logo')) }}" alt="{{ config('app.name', 'ZekkTech') }} Logo"
+                    class="h-20 w-20 mr-3">
                 <div class="text-left">
-                    <h1 class="text-4xl font-bold" style="color: var(--text-primary);">ZekkTech</h1>
+                    <h1 class="text-4xl font-bold" style="color: var(--text-primary);">{{ config('app.name', 'ZekkTech') }}
+                    </h1>
                     <p class="text-sm font-medium" style="color: var(--accent-color);">Blog Technology & Innovation</p>
                 </div>
             </div>

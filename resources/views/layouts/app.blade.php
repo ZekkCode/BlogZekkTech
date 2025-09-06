@@ -12,10 +12,50 @@
 
     <title>{{ config('app.name', 'BlogZekkTech') }} - @yield('title', 'Beranda')</title>
 
+    @hasSection('meta')
+        @yield('meta')
+    @else
+        @php
+            $defaultTitle = trim($__env->yieldContent('title', config('app.name', 'ZekkTech')));
+            $defaultDesc = trim($__env->yieldContent('meta_description', config('app.og_description')));
+            $defaultUrl = url()->current();
+            $defaultImagePath = config('app.og_image', 'storage/banner.jpg');
+            $defaultImageFile = public_path($defaultImagePath);
+            $defaultImage = asset($defaultImagePath) . '?v=' . (file_exists($defaultImageFile) ? @filemtime($defaultImageFile) : '1');
+        @endphp
+        <meta name="description" content="{{ $defaultDesc }}" />
+        <link rel="canonical" href="{{ $defaultUrl }}" />
+        <!-- Open Graph -->
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="{{ config('app.name', 'ZekkTech') }}" />
+        <meta property="og:title" content="{{ $defaultTitle }}" />
+        <meta property="og:description" content="{{ $defaultDesc }}" />
+        <meta property="og:url" content="{{ $defaultUrl }}" />
+        <meta property="og:image" content="{{ $defaultImage }}" />
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="{{ $defaultTitle }}" />
+        <meta name="twitter:description" content="{{ $defaultDesc }}" />
+        <meta name="twitter:image" content="{{ $defaultImage }}" />
+    @endif
+
+    <!-- Favicons -->
+        @php
+            $faviconPath = config('app.favicon', 'favicon.ico');
+            $faviconFile = public_path($faviconPath);
+            $faviconUrl = asset($faviconPath) . '?v=' . (file_exists($faviconFile) ? @filemtime($faviconFile) : '1');
+            $logoPath = config('app.logo', 'images/zekktech-logo-fixed.svg');
+            $logoUrl = asset($logoPath) . '?v=' . (file_exists(public_path($logoPath)) ? @filemtime(public_path($logoPath)) : '1');
+        @endphp
+        <link rel="icon" href="{{ $faviconUrl }}" sizes="any">
+        <link rel="shortcut icon" href="{{ $faviconUrl }}">
+        <link rel="icon" type="image/svg+xml" href="{{ $logoUrl }}">
+        <link rel="apple-touch-icon" href="{{ $faviconUrl }}">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700,800" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
+
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -91,6 +131,11 @@
             /* IE10+ */
         }
 
+        /* Smooth scrolling for in-page anchors */
+        html {
+            scroll-behavior: smooth;
+        }
+
         /* Allow selection only for specific elements where needed */
         input,
         textarea,
@@ -104,24 +149,34 @@
             -ms-user-select: text !important;
         }
 
-        /* Special styling for theme toggle to allow text selection */
+        /* Theme toggle: show pointer cursor and avoid text selection */
         #themeToggle,
         #themeToggleMobile {
-            cursor: text !important;
+            cursor: pointer !important;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
             pointer-events: auto !important;
         }
 
-        /* When hovering over theme toggle, show text cursor */
+        /* Hover state keeps pointer cursor */
         #themeToggle:hover,
         #themeToggleMobile:hover {
-            cursor: text !important;
+            cursor: pointer !important;
+        }
+
+        /* Ensure inner icons/elements of theme toggles are clickable and show pointer */
+        #themeToggle *,
+        #themeToggleMobile * {
+            cursor: pointer !important;
+            pointer-events: auto !important;
         }
 
         /* Prevent context menu on right click for images and other elements */
         img,
         svg,
-        .logo-img,
-        .action-btn {
+        .logo-img {
             -webkit-user-drag: none;
             -khtml-user-drag: none;
             -moz-user-drag: none;
@@ -241,6 +296,12 @@
         .action-btn:hover {
             background-color: var(--bg-primary);
             color: var(--text-primary);
+        }
+
+        /* Ensure action buttons (including hamburger) are clickable */
+        .action-btn {
+            pointer-events: auto !important;
+            cursor: pointer !important;
         }
 
         @media (min-width: 1024px) {
@@ -574,8 +635,8 @@
             <!-- Desktop Header -->
             <nav class="header-nav-desktop">
                 <a href="{{ route('home') }}" class="logo-link">
-                    <img src="{{ asset('images/zekktech-logo-fixed.svg') }}" alt="ZekkTech Logo" class="logo-img">
-                    <span class="logo-text">ZekkTech</span>
+                    <img src="{{ asset(config('app.logo')) }}" alt="{{ config('app.name', 'ZekkTech') }} Logo" class="logo-img">
+                    <span class="logo-text">{{ config('app.name', 'ZekkTech') }}</span>
                 </a>
                 <div class="nav-links-desktop">
                     <a href="{{ route('home') }}" class="nav-link">Beranda</a>
@@ -630,8 +691,8 @@
             <!-- Mobile Header -->
             <nav class="header-nav-mobile">
                 <a href="{{ route('home') }}" class="logo-link">
-                    <img src="{{ asset('images/zekktech-logo-fixed.svg') }}" alt="ZekkTech Logo" class="logo-img">
-                    <span class="logo-text">ZekkTech</span>
+                    <img src="{{ asset(config('app.logo')) }}" alt="{{ config('app.name', 'ZekkTech') }} Logo" class="logo-img">
+                    <span class="logo-text">{{ config('app.name', 'ZekkTech') }}</span>
                 </a>
                 <div class="header-actions">
                     <button id="themeToggleMobile" type="button" class="action-btn" onclick="toggleTheme()">
@@ -712,13 +773,12 @@
         </main>
 
         <footer style="background-color: var(--bg-secondary); border-top: 1px solid var(--border-color);" class="mt-16">
-            <div class="max-w-6xl mx-auto px-6 py-12">
+            <div id="about" class="max-w-6xl mx-auto px-6 py-12">
                 <div class="flex flex-col items-center text-center space-y-4">
                     <div class="flex items-center space-x-3">
-                        <img src="{{ asset('images/zekktech-logo-fixed.svg') }}" alt="ZekkTech Logo"
+                        <img src="{{ asset(config('app.logo')) }}" alt="{{ config('app.name', 'ZekkTech') }} Logo"
                             class="h-8 w-8 object-contain">
-                        <span class="text-lg font-semibold"
-                            style="color: var(--text-primary);">{{ config('app.name', 'ZekkTech') }}</span>
+                        <span class="text-lg font-semibold" style="color: var(--text-primary);">{{ config('app.name', 'ZekkTech') }}</span>
                     </div>
                     <p class="text-sm max-w-md" style="color: var(--text-secondary);">
                         ZekkTech adalah platform artikel gratis yang menyediakan Informasi Teknologi Terkini, Tutorial,
@@ -917,11 +977,24 @@
                 }
             });
 
-            // Close menu when clicking a link inside
+            // Close menu when clicking a link inside; if anchor (#...), scroll smoothly
             mobileMenu.querySelectorAll('a, button').forEach(link => {
-                link.addEventListener('click', () => {
+                link.addEventListener('click', (e) => {
+                    const href = link.getAttribute('href') || '';
+                    const isAnchor = href.startsWith('#');
+                    const targetId = isAnchor ? href.substring(1) : null;
                     if (mobileMenu.classList.contains('show')) {
                         toggleMobileMenu();
+                    }
+                    if (isAnchor) {
+                        e.preventDefault();
+                        // Wait a tick for the menu to close animation, then scroll
+                        setTimeout(() => {
+                            const el = document.getElementById(targetId);
+                            if (el) {
+                                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        }, 250);
                     }
                 });
             });

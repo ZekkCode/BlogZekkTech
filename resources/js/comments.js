@@ -5,7 +5,7 @@
 
 class CommentsSystem {
     constructor(postId) {
-        this.postId = postId;
+    this.postId = postId;
         this.currentPage = 1;
         this.currentSort = 'newest';
         this.isLoading = false;
@@ -176,20 +176,24 @@ class CommentsSystem {
 
         comments.forEach(comment => {
             const commentElement = this.createCommentElement(comment);
-            container.appendChild(commentElement);
+            if (commentElement) container.appendChild(commentElement);
         });
     }
 
     createCommentElement(comment) {
         const template = document.getElementById('comment-template');
-        const commentElement = template.content.cloneNode(true);
+        if (!template || !template.content || !template.content.firstElementChild) {
+            console.warn('Comment template missing');
+            return null;
+        }
+        // Clone the actual element instead of working with a fragment to avoid querySelector issues
+        const commentDiv = template.content.firstElementChild.cloneNode(true);
         
         // Set comment data
-        const commentDiv = commentElement.querySelector('.comment-item');
         commentDiv.dataset.commentId = comment.id;
         
         // Avatar - Generate letter avatar (null-safe)
-        const avatar = commentElement.querySelector('.comment-avatar');
+        const avatar = commentDiv.querySelector('.comment-avatar');
         const uname = (comment.user && comment.user.name) ? comment.user.name : 'U';
         if (avatar) {
             avatar.textContent = uname.charAt(0).toUpperCase();
@@ -200,17 +204,17 @@ class CommentsSystem {
     // Keep Blade-provided avatar styles; only set initial if needed
         
         // Username (Blade uses .comment-author)
-        const usernameEl = commentElement.querySelector('.comment-author');
+    const usernameEl = commentDiv.querySelector('.comment-author');
         if (usernameEl) usernameEl.textContent = comment.user?.name || 'User';
 
         // Verified badge (optional in template)
-        const verified = commentElement.querySelector('.comment-verified');
+    const verified = commentDiv.querySelector('.comment-verified');
         if (verified && comment.user && comment.user.is_verified) {
             verified.classList.remove('hidden');
         }
 
         // Time (Blade uses .comment-date)
-        const timeEl = commentElement.querySelector('.comment-date');
+    const timeEl = commentDiv.querySelector('.comment-date');
         if (timeEl) {
             const when = (comment.time_ago || '').toString();
             timeEl.textContent = when;
@@ -220,12 +224,12 @@ class CommentsSystem {
         }
         
         // Content
-    const content = commentElement.querySelector('.comment-content');
+    const content = commentDiv.querySelector('.comment-content');
     if (content) content.innerHTML = this.sanitizeHTML(comment.content || '');
         
         // Like button
-        const likeBtn = commentElement.querySelector('.comment-like-btn');
-        const likeCount = commentElement.querySelector('.like-count');
+    const likeBtn = commentDiv.querySelector('.comment-like-btn');
+    const likeCount = commentDiv.querySelector('.like-count');
         likeCount.textContent = comment.likes || 0;
         
         if (comment.is_liked_by_user) {
@@ -239,8 +243,8 @@ class CommentsSystem {
         }
         
         // Dislike button
-        const dislikeBtn = commentElement.querySelector('.comment-dislike-btn');
-        const dislikeCount = commentElement.querySelector('.dislike-count');
+    const dislikeBtn = commentDiv.querySelector('.comment-dislike-btn');
+    const dislikeCount = commentDiv.querySelector('.dislike-count');
         dislikeCount.textContent = comment.dislikes || 0;
         
         if (comment.is_disliked_by_user) {
@@ -254,7 +258,7 @@ class CommentsSystem {
         }
         
         // Reply button
-        const replyBtn = commentElement.querySelector('.comment-reply-btn');
+    const replyBtn = commentDiv.querySelector('.comment-reply-btn');
         if (this.isAuthenticated) {
             replyBtn.addEventListener('click', () => this.startReply(comment.id, comment.user.name));
         } else {
@@ -262,9 +266,9 @@ class CommentsSystem {
         }
         
         // Options menu (opsional di template)
-        const optionsBtn = commentElement.querySelector('.options-btn');
-        const optionsMenu = commentElement.querySelector('.options-menu');
-        const deleteBtn = commentElement.querySelector('.delete-comment-btn');
+    const optionsBtn = commentDiv.querySelector('.options-btn');
+    const optionsMenu = commentDiv.querySelector('.options-menu');
+    const deleteBtn = commentDiv.querySelector('.delete-comment-btn');
 
         if (optionsBtn && optionsMenu) {
             optionsBtn.addEventListener('click', (e) => {
@@ -288,14 +292,14 @@ class CommentsSystem {
         
         // Render replies
         if (comment.replies && comment.replies.length > 0) {
-            const repliesContainer = commentElement.querySelector('.comment-replies');
+            const repliesContainer = commentDiv.querySelector('.comment-replies');
             comment.replies.forEach(reply => {
                 const replyElement = this.createCommentElement(reply);
-                repliesContainer.appendChild(replyElement);
+                if (replyElement) repliesContainer.appendChild(replyElement);
             });
         }
         
-        return commentElement;
+        return commentDiv;
     }
 
     async handleSubmit(e) {
@@ -604,17 +608,18 @@ class CommentsSystem {
 
     setSubmitLoading(loading) {
         const submitBtn = document.getElementById('submit-comment');
+        if (!submitBtn) return;
         const submitText = submitBtn.querySelector('.submit-text');
         const submitLoading = submitBtn.querySelector('.submit-loading');
 
         if (loading) {
             submitBtn.disabled = true;
-            submitText.classList.add('hidden');
-            submitLoading.classList.remove('hidden');
+            if (submitText) submitText.classList.add('hidden');
+            if (submitLoading) submitLoading.classList.remove('hidden');
         } else {
             submitBtn.disabled = false;
-            submitText.classList.remove('hidden');
-            submitLoading.classList.add('hidden');
+            if (submitText) submitText.classList.remove('hidden');
+            if (submitLoading) submitLoading.classList.add('hidden');
         }
     }
 
@@ -723,8 +728,19 @@ class CommentsSystem {
 // Initialize comments system when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     const commentsSection = document.getElementById('comments-section');
-    if (commentsSection && window.postId) {
-        window.commentsSystem = new CommentsSystem(window.postId);
+    if (!commentsSection) return;
+    let pid = window.postId;
+    if (!pid) {
+        // Try dataset postId
+        pid = commentsSection.dataset.postId;
+        // Try to parse from comments index URL
+        if (!pid && commentsSection.dataset.commentsIndex) {
+            const m = commentsSection.dataset.commentsIndex.match(/\/posts\/(\d+)\/comments/);
+            if (m) pid = m[1];
+        }
+    }
+    if (pid) {
+        window.commentsSystem = new CommentsSystem(pid);
     }
 });
 

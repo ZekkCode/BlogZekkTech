@@ -1,6 +1,6 @@
 <!-- Comments Section Component -->
 <div id="comments-section" class="w-full mt-12" data-comments-index="{{ route('comments.index', $post, false) }}"
-    data-comments-store="{{ route('comments.store', $post, false) }}">
+    data-comments-store="{{ route('comments.store', $post, false) }}" data-post-id="{{ $post->id }}">
     <!-- Comments Header -->
     <div class="flex items-center justify-between mb-6">
         <div class="flex items-center gap-3">

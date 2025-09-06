@@ -6,7 +6,8 @@
     <div class="max-w-md mx-auto">
         <div class="card rounded-xl p-8">
             <div class="text-center mb-8">
-                <img src="{{ asset('images/zekktech-logo-fixed.svg') }}" alt="ZekkTech Logo" class="h-16 mx-auto mb-4">
+                <img src="{{ asset(config('app.logo')) }}" alt="{{ config('app.name', 'ZekkTech') }} Logo"
+                    class="h-16 mx-auto mb-4">
                 <h1 class="text-2xl font-semibold" style="color: var(--text-primary);">Login Admin</h1>
                 <p class="mt-2" style="color: var(--text-secondary);">Masuk untuk mengakses panel admin</p>
             </div>
