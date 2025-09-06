@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
@@ -19,47 +20,98 @@ class CommentController extends Controller
      */
     public function index(Request $request, Post $post): JsonResponse
     {
-        $sort = $request->get('sort', 'newest'); // newest, oldest, popular
+        try {
+            $sort = $request->get('sort', 'newest'); // newest, oldest, popular
 
-        $query = $post->comments()
-                     ->approved()
-                     ->parents()
-                     ->with(['user', 'replies.user', 'replies.replies.user']);
+            $query = $post->comments()
+                        ->approved()
+                        ->parents()
+                        ->with(['user', 'replies.user']); // limit depth to avoid heavy nesting
 
-        // Apply sorting
-        switch ($sort) {
-            case 'oldest':
-                $query->orderBy('created_at', 'asc');
-                break;
-            case 'popular':
-                $query->orderBy('likes', 'desc')
-                      ->orderBy('created_at', 'desc');
-                break;
-            default: // newest
-                $query->orderBy('created_at', 'desc');
-                break;
+            // Apply sorting
+            switch ($sort) {
+                case 'oldest':
+                    $query->orderBy('created_at', 'asc');
+                    break;
+                case 'popular':
+                    $query->orderBy('likes', 'desc')
+                          ->orderBy('created_at', 'desc');
+                    break;
+                default: // newest
+                    $query->orderBy('created_at', 'desc');
+                    break;
+            }
+
+            $comments = $query->paginate(10);
+
+            // Add user interaction data if authenticated
+            if (Auth::check()) {
+                $this->addUserInteractionData($comments->items());
+            }
+
+            // Optional: minimal transform to ensure JSON-safe payload
+            $serialized = collect($comments->items())->map(function ($c) {
+                return [
+                    'id' => $c->id,
+                    'user_id' => $c->user_id,
+                    'content' => $c->content,
+                    'created_at' => $c->created_at,
+                    'time_ago' => method_exists($c, 'getTimeAgoAttribute') ? $c->time_ago : null,
+                    'likes' => $c->likes,
+                    'dislikes' => $c->dislikes,
+                    'is_liked_by_user' => $c->is_liked_by_user ?? false,
+                    'is_disliked_by_user' => $c->is_disliked_by_user ?? false,
+                    'user' => $c->relationLoaded('user') && $c->user ? [
+                        'id' => $c->user->id,
+                        'name' => $c->user->name,
+                        'avatar' => $c->user->avatar ?? null,
+                    ] : null,
+                    'replies' => $c->relationLoaded('replies') ? collect($c->replies)->map(function ($r) {
+                        return [
+                            'id' => $r->id,
+                            'user_id' => $r->user_id,
+                            'content' => $r->content,
+                            'created_at' => $r->created_at,
+                            'time_ago' => method_exists($r, 'getTimeAgoAttribute') ? $r->time_ago : null,
+                            'likes' => $r->likes,
+                            'dislikes' => $r->dislikes,
+                            'is_liked_by_user' => $r->is_liked_by_user ?? false,
+                            'is_disliked_by_user' => $r->is_disliked_by_user ?? false,
+                            'user' => $r->relationLoaded('user') && $r->user ? [
+                                'id' => $r->user->id,
+                                'name' => $r->user->name,
+                                'avatar' => $r->user->avatar ?? null,
+                            ] : null,
+                            'replies' => [], // limit nesting to 1 level for stability
+                        ];
+                    })->all() : [],
+                ];
+            })->all();
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'comments' => $serialized,
+                    'pagination' => [
+                        'current_page' => $comments->currentPage(),
+                        'last_page' => $comments->lastPage(),
+                        'total' => $comments->total(),
+                        'per_page' => $comments->perPage(),
+                    ],
+                    'total_comments' => $post->comments()->where('is_approved', true)->count(),
+                ]
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Comments index failed', [
+                'post_id' => $post->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load comments',
+            ], 500);
         }
-
-        $comments = $query->paginate(10);
-
-        // Add user interaction data if authenticated
-        if (Auth::check()) {
-            $this->addUserInteractionData($comments->items());
-        }
-
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'comments' => $comments->items(),
-                'pagination' => [
-                    'current_page' => $comments->currentPage(),
-                    'last_page' => $comments->lastPage(),
-                    'total' => $comments->total(),
-                    'per_page' => $comments->perPage(),
-                ],
-                'total_comments' => $post->comments_count,
-            ]
-        ]);
     }
 
     /**
@@ -67,6 +119,11 @@ class CommentController extends Controller
      */
     public function store(Request $request, Post $post): JsonResponse
     {
+        // Ensure 'content' is present even if frontend uses alternate field name
+        if (!$request->filled('content') && $request->filled('content_text')) {
+            $request->merge(['content' => $request->input('content_text')]);
+        }
+
         // Rate limiting: 5 comments per minute
         $key = 'comment:' . $request->ip();
         if (RateLimiter::tooManyAttempts($key, 5)) {
@@ -257,7 +314,7 @@ class CommentController extends Controller
                                ->keyBy('comment_id');
 
         // Add interaction data to each comment
-        foreach ($comments as $comment) {
+    foreach ($comments as $comment) {
             $userLike = $userLikes->get($comment->id);
             $comment->user_like_type = $userLike ? $userLike->type : null;
             $comment->is_liked_by_user = $userLike && $userLike->type === 'like';
@@ -265,7 +322,8 @@ class CommentController extends Controller
 
             // Add interaction data to replies recursively
             if ($comment->replies && $comment->replies->count() > 0) {
-                $this->addUserInteractionData($comment->replies->toArray());
+        // Pass array of models, not array of arrays
+        $this->addUserInteractionData($comment->replies->all());
             }
         }
     }

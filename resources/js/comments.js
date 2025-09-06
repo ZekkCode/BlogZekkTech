@@ -119,8 +119,11 @@ class CommentsSystem {
 
         try {
             console.log(`Loading comments for post ${this.postId}`);
-            const response = await fetch(`/posts/${this.postId}/comments?sort=${this.currentSort}&page=${this.currentPage}`);
-            const data = await response.json();
+            const section = document.getElementById('comments-section');
+            const base = section?.dataset?.commentsIndex || `/posts/${this.postId}/comments`;
+            const url = `${base}${base.includes('?') ? '&' : '?'}sort=${this.currentSort}&page=${this.currentPage}`;
+            const response = await fetch(url, { headers: { 'Accept': 'application/json' } });
+            const data = await response.json().catch(() => ({ success: false }));
 
             console.log('Comments response:', data);
 
@@ -185,41 +188,40 @@ class CommentsSystem {
         const commentDiv = commentElement.querySelector('.comment-item');
         commentDiv.dataset.commentId = comment.id;
         
-        // Avatar - Generate letter avatar
+        // Avatar - Generate letter avatar (null-safe)
         const avatar = commentElement.querySelector('.comment-avatar');
-        avatar.textContent = comment.user.name.charAt(0).toUpperCase();
-        avatar.title = comment.user.name;
-        
-        // Generate consistent color based on username
-        const colors = [
-            'from-orange-400 to-red-500',
-            'from-blue-400 to-indigo-500', 
-            'from-green-400 to-emerald-500',
-            'from-purple-400 to-pink-500',
-            'from-yellow-400 to-orange-500',
-            'from-cyan-400 to-blue-500'
-        ];
-        const colorIndex = this.hashCode(comment.user.name) % colors.length;
-        avatar.className = `comment-avatar w-12 h-12 rounded-full bg-gradient-to-r ${colors[colorIndex]} flex items-center justify-center text-white font-semibold text-lg shadow-md`;
-        
-        // Username
-        const username = commentElement.querySelector('.comment-username');
-        username.textContent = comment.user.name;
-        
-        // Verified badge
-        const verified = commentElement.querySelector('.comment-verified');
-        if (comment.user.is_verified) {
-            verified.classList.remove('hidden');
+        const uname = (comment.user && comment.user.name) ? comment.user.name : 'U';
+        if (avatar) {
+            avatar.textContent = uname.charAt(0).toUpperCase();
+            avatar.title = uname;
         }
         
-        // Time
-        const time = commentElement.querySelector('.comment-time');
-        time.textContent = comment.time_ago;
-        time.title = new Date(comment.created_at).toLocaleString();
+        // Generate consistent color based on username
+    // Keep Blade-provided avatar styles; only set initial if needed
+        
+        // Username (Blade uses .comment-author)
+        const usernameEl = commentElement.querySelector('.comment-author');
+        if (usernameEl) usernameEl.textContent = comment.user?.name || 'User';
+
+        // Verified badge (optional in template)
+        const verified = commentElement.querySelector('.comment-verified');
+        if (verified && comment.user && comment.user.is_verified) {
+            verified.classList.remove('hidden');
+        }
+
+        // Time (Blade uses .comment-date)
+        const timeEl = commentElement.querySelector('.comment-date');
+        if (timeEl) {
+            const when = (comment.time_ago || '').toString();
+            timeEl.textContent = when;
+            if (comment.created_at) {
+                try { timeEl.title = new Date(comment.created_at).toLocaleString(); } catch (_) {}
+            }
+        }
         
         // Content
-        const content = commentElement.querySelector('.comment-content');
-        content.innerHTML = this.sanitizeHTML(comment.content);
+    const content = commentElement.querySelector('.comment-content');
+    if (content) content.innerHTML = this.sanitizeHTML(comment.content || '');
         
         // Like button
         const likeBtn = commentElement.querySelector('.comment-like-btn');
@@ -259,25 +261,29 @@ class CommentsSystem {
             replyBtn.addEventListener('click', () => this.showLoginPrompt());
         }
         
-        // Options menu
+        // Options menu (opsional di template)
         const optionsBtn = commentElement.querySelector('.options-btn');
         const optionsMenu = commentElement.querySelector('.options-menu');
         const deleteBtn = commentElement.querySelector('.delete-comment-btn');
-        
-        optionsBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            // Hide other menus
-            document.querySelectorAll('.options-menu').forEach(menu => {
-                if (menu !== optionsMenu) menu.classList.add('hidden');
+
+        if (optionsBtn && optionsMenu) {
+            optionsBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Hide other menus
+                document.querySelectorAll('.options-menu').forEach(menu => {
+                    if (menu !== optionsMenu) menu.classList.add('hidden');
+                });
+                optionsMenu.classList.toggle('hidden');
             });
-            optionsMenu.classList.toggle('hidden');
-        });
-        
-        // Show delete button only for comment owner or admin
-        if (this.isAuthenticated && (comment.user_id === window.currentUserId || window.isAdmin)) {
-            deleteBtn.addEventListener('click', () => this.deleteComment(comment.id));
-        } else {
-            deleteBtn.style.display = 'none';
+        }
+
+        // Delete button (opsional)
+        if (deleteBtn) {
+            if (this.isAuthenticated && (comment.user_id === window.currentUserId || window.isAdmin)) {
+                deleteBtn.addEventListener('click', () => this.deleteComment(comment.id));
+            } else {
+                deleteBtn.style.display = 'none';
+            }
         }
         
         // Render replies
@@ -323,15 +329,18 @@ class CommentsSystem {
                 formData.append('parent_id', parentId);
             }
 
-            const response = await fetch(`/posts/${this.postId}/comments`, {
+        const section = document.getElementById('comments-section');
+        const storeUrl = section?.dataset?.commentsStore || `/posts/${this.postId}/comments`;
+        const response = await fetch(storeUrl, {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json'
                 }
             });
 
-            const data = await response.json();
+        const data = await response.json().catch(() => ({ success: false }));
 
             if (data.success) {
                 this.showSuccess('Comment posted successfully!');
@@ -452,20 +461,36 @@ class CommentsSystem {
     }
 
     handlePaste(e) {
+        const editor = document.getElementById('comment-editor');
+        // Allow default paste for textarea; sanitize only for contenteditable
+        if (editor && (editor.tagName === 'TEXTAREA' || editor.nodeName === 'TEXTAREA')) {
+            // Let browser handle; optional: strip formatting not needed for textarea
+            return;
+        }
         e.preventDefault();
-        const text = e.clipboardData.getData('text/plain');
+        const text = (e.clipboardData && e.clipboardData.getData('text/plain')) || '';
         document.execCommand('insertText', false, text);
         this.updateCharacterCount();
     }
 
     getEditorContent() {
         const editor = document.getElementById('comment-editor');
+        if (!editor) return '';
+        if (editor.tagName === 'TEXTAREA' || editor.nodeName === 'TEXTAREA') {
+            return editor.value || '';
+        }
+        // contenteditable div/span
         return editor.textContent || editor.innerText || '';
     }
 
     clearEditor() {
         const editor = document.getElementById('comment-editor');
-        editor.innerHTML = '';
+        if (!editor) return;
+        if (editor.tagName === 'TEXTAREA' || editor.nodeName === 'TEXTAREA') {
+            editor.value = '';
+        } else {
+            editor.innerHTML = '';
+        }
         this.updateCharacterCount();
     }
 

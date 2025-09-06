@@ -1,5 +1,6 @@
 <!-- Comments Section Component -->
-<div id="comments-section" class="w-full mt-12">
+<div id="comments-section" class="w-full mt-12" data-comments-index="{{ route('comments.index', $post, false) }}"
+    data-comments-store="{{ route('comments.store', $post, false) }}">
     <!-- Comments Header -->
     <div class="flex items-center justify-between mb-6">
         <div class="flex items-center gap-3">
@@ -53,16 +54,18 @@
 
         <!-- Comment Form -->
         <div class="mb-8">
-            <form id="comment-form" class="space-y-4">
+            <form id="comment-form" class="space-y-4" method="POST" action="{{ route('comments.store', $post) }}">
                 @csrf
                 <input type="hidden" name="post_id" value="{{ $post->id }}">
                 <input type="hidden" name="parent_id" id="parent-comment-id">
+                <input type="hidden" name="content" id="content-hidden" value="">
 
                 <!-- Simple Text Area -->
                 <div class="border rounded-lg" style="border-color: var(--border-color);">
-                    <textarea id="comment-editor" placeholder="Write your comment here..."
+                    <textarea id="comment-editor" placeholder="Write your comment here..." name="content_text"
                         class="w-full min-h-[100px] p-4 rounded-lg border-0 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                         style="background-color: var(--bg-secondary); color: var(--text-primary);"
+                        oninput="(function(el){var v=el.value||'';var cc=document.getElementById('character-count');if(cc){cc.textContent=v.length+'/2000';cc.style.color=v.length>1900?'#ef4444':'var(--text-secondary)';}var hid=document.getElementById('content-hidden');if(hid){hid.value=v;}})(this)"
                         maxlength="2000"></textarea>
                 </div>
 
@@ -261,42 +264,94 @@
         window.isAdmin = false;
     @endauth
 
-    // Initialize basic comments functionality
-    document.addEventListener('DOMContentLoaded', function () {
-        const commentEditor = document.getElementById('comment-editor');
-        const characterCount = document.getElementById('character-count');
+    // Lightweight UI init with safe fallback submission when CommentsSystem isn't present
+    (function () {
+        function setup() {
+            const editor = document.getElementById('comment-editor');
+            const counter = document.getElementById('character-count');
+            const hiddenContent = document.getElementById('content-hidden');
 
-        // Character count functionality
-        if (commentEditor && characterCount) {
-            commentEditor.addEventListener('input', function () {
-                const count = this.value.length;
-                characterCount.textContent = `${count}/2000`;
+            // Character counter + sync hidden content
+            if (editor && counter) {
+                const sync = () => {
+                    const val = editor.value || '';
+                    counter.textContent = `${val.length}/2000`;
+                    counter.style.color = val.length > 1900 ? '#ef4444' : 'var(--text-secondary)';
+                    if (hiddenContent) hiddenContent.value = val;
+                };
+                editor.addEventListener('input', sync);
+                sync();
+            }
 
-                if (count > 1900) {
-                    characterCount.style.color = '#ef4444';
-                } else {
-                    characterCount.style.color = 'var(--text-secondary)';
-                }
-            });
+            // Fallback submit via fetch only if CommentsSystem isn't loaded
+            const form = document.getElementById('comment-form');
+            if (form && typeof window.CommentsSystem === 'undefined') {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const tokenEl = document.querySelector('meta[name="csrf-token"]');
+                    const token = tokenEl ? tokenEl.getAttribute('content') : '';
+                    const formData = new FormData(form);
+                    const content = editor ? (editor.value || '').trim() : '';
+                    if (!content) { notify('Please write a comment', 'error'); return; }
+                    if (content.length > 2000) { notify('Comment is too long (max 2000 characters)', 'error'); return; }
+                    if (hiddenContent) formData.set('content', content); else formData.append('content', content);
+
+                    toggleSubmit(true);
+                    try {
+                        const res = await fetch(form.action, {
+                            method: 'POST',
+                            headers: { 'X-CSRF-TOKEN': token, 'Accept': 'application/json' },
+                            body: formData
+                        });
+                        const data = await res.json().catch(() => null);
+                        if (res.ok && data && data.success) {
+                            if (editor) editor.value = '';
+                            if (hiddenContent) hiddenContent.value = '';
+                            if (counter) counter.textContent = '0/2000';
+                            notify('Comment posted successfully!', 'success');
+                            if (window.commentsSystem && typeof window.commentsSystem.loadComments === 'function') {
+                                window.commentsSystem.loadComments(true);
+                            }
+                        } else {
+                            notify((data && data.message) || 'Failed to post comment', 'error');
+                        }
+                    } catch (_) {
+                        notify('Failed to post comment', 'error');
+                    } finally {
+                        toggleSubmit(false);
+                    }
+                });
+            }
+
+            function toggleSubmit(disabled) {
+                const btn = document.getElementById('submit-comment');
+                if (!btn) return;
+                const t = btn.querySelector('.submit-text');
+                const l = btn.querySelector('.submit-loading');
+                btn.disabled = disabled;
+                if (t) t.classList.toggle('hidden', disabled);
+                if (l) l.classList.toggle('hidden', !disabled);
+            }
+
+            function notify(message, type) {
+                const n = document.createElement('div');
+                n.className = `notification ${type === 'error' ? 'error' : type === 'success' ? 'success' : 'info'}`;
+                n.textContent = message;
+                document.body.appendChild(n);
+                requestAnimationFrame(() => n.classList.add('show'));
+                setTimeout(() => {
+                    n.classList.remove('show');
+                    setTimeout(() => n.remove(), 300);
+                }, 3000);
+            }
+
+            // Biarkan CommentsSystem diinisialisasi oleh bundle JS utama (resources/js/comments.js)
         }
 
-        // Basic form submission
-        const commentForm = document.getElementById('comment-form');
-        if (commentForm) {
-            commentForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                // Form submission will be handled by CommentsSystem if available
-                if (typeof CommentsSystem !== 'undefined') {
-                    // Let CommentsSystem handle it
-                } else {
-                    console.log('CommentsSystem not loaded');
-                }
-            });
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setup);
+        } else {
+            setup();
         }
-
-        // Initialize comments system if available
-        if (typeof window.postId !== 'undefined' && typeof CommentsSystem !== 'undefined') {
-            new CommentsSystem(window.postId);
-        }
-    });
+    })();
 </script>

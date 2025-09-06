@@ -962,8 +962,5 @@
 
             </div>
         </div>
-
-        <!-- Comments Section -->
-        @include('components.comments-new', ['post' => $post])
     </div>
 @endsection
