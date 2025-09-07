@@ -14,6 +14,12 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Safety: skip in production unless explicitly allowed
+        if (app()->environment('production') && !env('ALLOW_ADMIN_SEED', false)) {
+            $this->command?->warn('AdminUserSeeder skipped in production');
+            return;
+        }
+
         User::create([
             'name' => 'Zekk',
             'email' => 'zakariamujur6@gmail.com',
@@ -29,7 +35,9 @@ class AdminUserSeeder extends Seeder
             'password' => Hash::make('admin123'),
             'is_admin' => true,
             'theme_preference' => 'light',
-        ]);        // User biasa sebagai contoh
+    ]);
+
+    // User biasa sebagai contoh
         User::create([
             'name' => 'User Biasa',
             'email' => 'user@zekktech.com',

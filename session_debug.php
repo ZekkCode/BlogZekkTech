@@ -4,6 +4,13 @@ $app = require_once __DIR__ . "/bootstrap/app.php";
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 $response = $kernel->handle($request = Illuminate\Http\Request::capture());
 
+// Block in production for safety
+if (app()->environment('production') || !config('app.debug')) {
+	http_response_code(403);
+	echo "Forbidden";
+	exit;
+}
+
 // Check session
 $session = app('session');
 echo "Session driver: " . config('session.driver') . "\n";

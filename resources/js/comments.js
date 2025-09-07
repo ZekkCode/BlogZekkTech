@@ -690,7 +690,7 @@ class CommentsSystem {
                         <button onclick="this.closest('.fixed').remove()" class="flex-1 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium">
                             Batal
                         </button>
-                        <button onclick="window.location.href='/admin/login'" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg">
+                        <button onclick="window.location.href='/login'" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg">
                             Masuk
                         </button>
                     </div>
